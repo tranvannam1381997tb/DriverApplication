@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.common.afterTextChanged
 import com.example.driverapplication.common.onEditorActionDone
+import com.example.driverapplication.common.onEditorActionNext
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityLoginBinding
@@ -37,8 +38,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setEventView() {
-        binding.username.afterTextChanged {
-            loginViewModel.validateDataLogin(binding.username.text.toString(), binding.password.text.toString())
+        binding.username.apply {
+            afterTextChanged {
+                loginViewModel.validateDataLogin(
+                    binding.username.text.toString(),
+                    binding.password.text.toString()
+                )
+            }
+
+            onEditorActionNext {
+                binding.password.requestFocus()
+            }
         }
 
         binding.password.apply {

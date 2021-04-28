@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Grab Application</string>
+    <string name="app_name">Driver Application</string>
     <string name="prompt_username">Nhập tài khoản</string>
     <string name="prompt_password">Nhâp mật khẩu</string>
     <string name="action_sign_in">Đăng nhập</string>
@@ -29,4 +29,7 @@
     <string name="confirm_book_driver">Bạn có muốn đặt cuốc xe này chứ?</string>
     <string name="ok">OK</string>
     <string name="cancel">Huỷ bỏ</string>
+
+    //Login Activity
+    <string name="sign_up"><u>Đăng ký</u></string>
 </resources>

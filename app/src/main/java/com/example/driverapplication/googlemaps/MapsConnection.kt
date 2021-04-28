@@ -5,7 +5,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
-import com.example.driverapplication.activities.MainActivity
+import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.CommonUtils
 import com.example.grabapplication.googlemaps.models.Distance
 import com.example.grabapplication.googlemaps.models.PlaceModel
@@ -71,7 +71,7 @@ class MapsConnection private constructor() {
     fun getShortestWay(latitude: Double, longitude: Double, callback: (Distance) -> Unit) {
         var min = 0
         var minDistance = MapsConstant.DEFAULT_DISTANCE
-        val currentLocation = MainActivity.currentLocation
+        val currentLocation = AccountManager.getInstance().getLocationDriver()
         val urlDirections = getMapsApiDirectionsUrl(currentLocation.latitude, currentLocation.longitude, latitude, longitude)
         val directionsRequest = object : StringRequest(
             Method.GET,

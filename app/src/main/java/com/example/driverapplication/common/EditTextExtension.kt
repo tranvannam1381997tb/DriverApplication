@@ -37,3 +37,14 @@ fun EditText.onEditorActionDone(onEditorActionDone: (String) -> Unit) {
         false
     }
 }
+
+fun EditText.onEditorActionNext(onEditorActionDone: (String) -> Unit) {
+    this.setOnEditorActionListener { _, actionId, _ ->
+        when (actionId) {
+            EditorInfo.IME_ACTION_NEXT -> {
+                onEditorActionDone.invoke(this.text.toString())
+            }
+        }
+        false
+    }
+}
