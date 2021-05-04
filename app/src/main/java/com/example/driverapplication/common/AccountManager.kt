@@ -37,7 +37,7 @@ class AccountManager private constructor() {
     }
 
     init {
-        getTokenId {
+        getTokenIdDevice {
             tokenId = it
         }
     }
@@ -50,7 +50,12 @@ class AccountManager private constructor() {
         return idDriver ?: ""
     }
 
-    private fun getTokenId(callback: (String?) -> Unit) {
+    fun getTokenIdDevice(callback: (String?) -> Unit) {
+        if (tokenId != null) {
+            callback.invoke(tokenId)
+            FirebaseManager.getInstance().updateTokenIdToFirebase(tokenId!!)
+            return
+        }
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
             if(!it.isSuccessful){
                 Log.e("NamTV", "getInstanceId failed", it.exception)
@@ -58,6 +63,7 @@ class AccountManager private constructor() {
             }
             val token =  it.result?.token
             callback.invoke(token)
+            FirebaseManager.getInstance().updateTokenIdToFirebase(token!!)
         }
     }
 

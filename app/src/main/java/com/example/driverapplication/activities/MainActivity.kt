@@ -55,8 +55,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
 
+        // TODO debug code
+        accountManager.saveIdDriver("idDriver_1")
+
         initDataMap()
         initView()
+        accountManager.getTokenIdDevice {  }
     }
 
     private fun initDataMap() {
