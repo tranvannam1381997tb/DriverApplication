@@ -13,4 +13,9 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
             super.handleIntent(intent)
         }
     }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("NamTV", "New Device Token $token")
+    }
 }

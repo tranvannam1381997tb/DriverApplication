@@ -15,6 +15,8 @@
     <string name="prompt_start_address">Gặp tôi ở…</string>
     <string name="prompt_end_address">Bạn đến đâu?</string>
 
+    <string name="channel_id">channel1</string>
+
     //Info driver fragment
     <string name="start_date">Gia nhập </string>
     <string name="grab_bike">GrabBike</string>

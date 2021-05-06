@@ -62,6 +62,7 @@ class AccountManager private constructor() {
                 return@addOnCompleteListener
             }
             val token =  it.result?.token
+            Log.d("NamTV", "$token")
             callback.invoke(token)
             FirebaseManager.getInstance().updateTokenIdToFirebase(token!!)
         }
