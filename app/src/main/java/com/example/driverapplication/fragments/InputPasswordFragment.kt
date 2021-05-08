@@ -1,0 +1,59 @@
+package com.example.grabapplication.fragments
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.example.driverapplication.R
+import com.example.driverapplication.common.setOnSingleClickListener
+import com.example.driverapplication.databinding.FragmentInputPasswordBinding
+import com.example.driverapplication.viewmodel.BaseViewModelFactory
+import com.example.driverapplication.viewmodel.SignUpViewModel
+
+class InputPasswordFragment : Fragment() {
+
+    private val inputPasswordViewModel: SignUpViewModel
+            by lazy {
+                ViewModelProvider(requireActivity(), BaseViewModelFactory(requireContext())).get(
+                    SignUpViewModel::class.java)
+            }
+
+    private lateinit var binding: FragmentInputPasswordBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_input_password, container, false)
+        val view = binding.root
+        binding.viewModel = inputPasswordViewModel
+        setUpEvent()
+        return view
+    }
+
+    private fun setUpEvent(){
+        binding.btnNextInputPassword.setOnSingleClickListener(View.OnClickListener {
+            if (validatePassword(binding.edtPassword.text.toString())) {
+                inputPasswordViewModel.password = binding.edtPassword.text.toString()
+                inputPasswordViewModel.onClickSignUpScreenListener?.clickBtnNextInputPassword()
+            } else {
+                showToastError(getString(R.string.error_password_invalid))
+            }
+        })
+    }
+
+    private fun validatePassword(password: String): Boolean {
+        if (password.isNotEmpty()) {
+            return true
+        }
+        return false
+    }
+
+    private fun showToastError(error: String) {
+        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+    }
+}

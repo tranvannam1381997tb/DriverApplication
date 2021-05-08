@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.driverapplication.viewmodel.LoginViewModel" />
@@ -14,52 +15,52 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/username"
+            android:id="@+id/edtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="96dp"
             android:layout_marginEnd="24dp"
+            android:background="@drawable/edit_text_style"
+            android:focusableInTouchMode="true"
+            android:hint="@string/prompt_phone_number"
+            android:imeOptions="actionNext"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
             android:paddingStart="15dp"
             android:paddingEnd="20dp"
-            android:hint="@string/prompt_username"
             android:singleLine="true"
-            android:maxLines="1"
-            android:inputType="textNoSuggestions"
-            android:background="@drawable/edit_text_style"
-            android:imeOptions="actionNext"
-            android:focusableInTouchMode="true"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/password"
+            android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
-            android:paddingStart="15dp"
-            android:paddingEnd="20dp"
-            android:hint="@string/prompt_password"
-            android:singleLine="true"
-            android:maxLines="1"
             android:background="@drawable/edit_text_style"
             android:focusableInTouchMode="true"
+            android:hint="@string/prompt_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            android:maxLines="1"
+            android:paddingStart="15dp"
+            android:paddingEnd="20dp"
+            android:singleLine="true"
+            app:layout_constraintTop_toBottomOf="@+id/edtPhoneNumber" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="18sp"
             android:text="@string/sign_up"
             android:textColor="@color/color_sign_up"
-            app:layout_constraintTop_toBottomOf="@id/password"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:onSingleClick="@{() -> viewModel.startSignUp()}"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtPassword"
+            app:onSingleClick="@{() -> viewModel.startSignUp()}" />
 
         <Button
             android:id="@+id/login"
@@ -67,13 +68,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginTop="16dp"
+            android:enabled="@{viewModel.isEnableBtnLogin}"
             android:text="@string/action_sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
-            app:layout_constraintVertical_bias="0.2"
-            android:enabled="@{viewModel.isEnableBtnLogin}" />
+            app:layout_constraintTop_toBottomOf="@+id/edtPassword"
+            app:layout_constraintVertical_bias="0.2" />
 
         <ProgressBar
             android:id="@+id/loading"
@@ -82,8 +83,8 @@
             android:layout_gravity="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/password"
-            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.3" />
     </androidx.constraintlayout.widget.ConstraintLayout>

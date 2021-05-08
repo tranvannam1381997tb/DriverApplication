@@ -1,6 +1,7 @@
 package com.example.driverapplication.firebase
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.util.Log
 import com.example.driverapplication.common.Constants
 import com.google.android.gms.maps.model.LatLng
@@ -50,6 +51,29 @@ class FirebaseUtils {
             }
 
             return ""
+        }
+
+        fun validateInfoUser(bundle: Bundle?): Boolean {
+            if (bundle == null) {
+                return false
+            }
+            if (bundle.getString(FirebaseConstants.KEY_START_ADDRESS).isNullOrEmpty()) {
+                return false
+            }
+            if (bundle.getString(FirebaseConstants.KEY_END_ADDRESS).isNullOrEmpty()) {
+                return false
+            }
+            if (bundle.getString(FirebaseConstants.KEY_USER_ID).isNullOrEmpty()) {
+                return false
+            }
+            if (bundle.getString(FirebaseConstants.KEY_PRICE).isNullOrEmpty()) {
+                return false
+            }
+            if (bundle.getString(FirebaseConstants.KEY_DISTANCE).isNullOrEmpty()) {
+                return false
+            }
+
+            return true
         }
     }
 }

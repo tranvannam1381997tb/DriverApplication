@@ -7,7 +7,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 
 class AccountManager private constructor() {
 
-    private var idDriver: String? = null
+    private var driverId: String? = null
     private var tokenId: String? = null
     private var name: String? = null
     private var age: Int? = null
@@ -42,12 +42,12 @@ class AccountManager private constructor() {
         }
     }
 
-    fun saveIdDriver(id: String) {
-        idDriver = id
+    fun saveDriverId(id: String) {
+        driverId = id
     }
 
-    fun getIdDriver(): String{
-        return idDriver ?: ""
+    fun getDriverId(): String{
+        return driverId ?: ""
     }
 
     fun getTokenIdDevice(callback: (String?) -> Unit) {
@@ -76,4 +76,9 @@ class AccountManager private constructor() {
     fun getLocationDriver(): LatLng {
         return currentLocation ?: Constants.DEFAULT_LOCATION
     }
+}
+
+enum class SexValue(val rawValue: Int) {
+    MALE(0),
+    FEMALE(1)
 }

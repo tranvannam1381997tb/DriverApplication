@@ -38,7 +38,7 @@ class FirebaseManager private constructor() {
             }
 
     fun updateLocationDriverToFirebase(location: LatLng) {
-        val idDriver = AccountManager.getInstance().getIdDriver()
+        val idDriver = AccountManager.getInstance().getDriverId()
         if (idDriver.isNotEmpty()) {
             databaseDrivers.child(idDriver).child(FirebaseConstants.KEY_LATITUDE).setValue(location.latitude)
             databaseDrivers.child(idDriver).child(FirebaseConstants.KEY_LONGITUDE).setValue(location.longitude)
@@ -46,7 +46,7 @@ class FirebaseManager private constructor() {
     }
 
     fun updateTokenIdToFirebase(tokenId: String) {
-        val idDriver = AccountManager.getInstance().getIdDriver()
+        val idDriver = AccountManager.getInstance().getDriverId()
         if (idDriver.isNotEmpty()) {
             databaseDrivers.child(idDriver).child(FirebaseConstants.KEY_TOKEN_ID).setValue(tokenId)
         }

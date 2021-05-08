@@ -3,20 +3,19 @@ package com.example.driverapplication.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
-import com.example.driverapplication.common.afterTextChanged
-import com.example.driverapplication.common.onEditorActionDone
-import com.example.driverapplication.common.onEditorActionNext
+import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityLoginBinding
+import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.LoginViewModel
 import kotlinx.coroutines.*
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,24 +37,24 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setEventView() {
-        binding.username.apply {
+        binding.edtPhoneNumber.apply {
             afterTextChanged {
                 loginViewModel.validateDataLogin(
-                    binding.username.text.toString(),
-                    binding.password.text.toString()
+                    binding.edtPhoneNumber.text.toString(),
+                    binding.edtPassword.text.toString()
                 )
             }
 
             onEditorActionNext {
-                binding.password.requestFocus()
+                binding.edtPassword.requestFocus()
             }
         }
 
-        binding.password.apply {
+        binding.edtPassword.apply {
             afterTextChanged {
                 loginViewModel.validateDataLogin(
-                    binding.username.text.toString(),
-                    binding.password.text.toString()
+                    binding.edtPhoneNumber.text.toString(),
+                    binding.edtPassword.text.toString()
                 )
             }
 
@@ -70,29 +69,43 @@ class LoginActivity : AppCompatActivity() {
             binding.loading.visibility = View.VISIBLE
             startLogin()
         }
+
+        // TODO debug code
+        binding.edtPhoneNumber.setText("0976356351")
+        binding.edtPassword.setText("123456")
     }
 
     private fun startLogin() {
-        jobStartLogin =  GlobalScope.launch(Dispatchers.IO) {
-            val completionHandler = HttpConnection.getInstance().startLogin(binding.username.text.toString(), binding.password.text.toString())
-            if (!isActive) {
-                return@launch
-            }
-            withContext(Dispatchers.Main) {
-                // TODO debug code
-                completionHandler.error = null
-
-                if (completionHandler.error != null) {
-                    showDialogError(completionHandler.error)
-                    binding.loading.visibility = View.GONE
-                } else {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                }
+        HttpConnection.getInstance().startLogin(getJSONLogin()) { isSuccess, dataResponse ->
+            if (isSuccess) {
+                val jsonObject = JSONObject(dataResponse)
+                val userId = CommonUtils.getStringFromJsonObject(jsonObject, DriverInfoKey.KeyDriverId.rawValue)
+                val accountManager = AccountManager.getInstance()
+                accountManager.saveDriverId(userId)
+                startMainActivity()
+            } else {
+                showDialogError(dataResponse)
             }
         }
+    }
+
+    private fun getJSONLogin(): JSONObject {
+        val jsonBody = JSONObject()
+        val phoneNumber = binding.edtPhoneNumber.text.toString()
+        if (phoneNumber.startsWith("0")) {
+            val phoneNumberFormat = "+84" + phoneNumber.substring(1, phoneNumber.length)
+            jsonBody.put(DriverInfoKey.KeyPhoneNumber.rawValue, phoneNumberFormat)
+        } else {
+            jsonBody.put(DriverInfoKey.KeyPhoneNumber.rawValue, phoneNumber)
+        }
+        jsonBody.put(DriverInfoKey.KeyPassword.rawValue, binding.edtPassword.text.toString())
+        return jsonBody
+    }
+
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
     }
 
     private fun showDialogError(message: String?) {

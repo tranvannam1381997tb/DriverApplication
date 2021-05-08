@@ -8,12 +8,15 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.Constants
 import com.example.driverapplication.databinding.ActivityMainBinding
+import com.example.driverapplication.firebase.FirebaseConstants
+import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 import com.google.android.gms.location.*
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 AccountManager.getInstance()
             }
 
+    private var currentFragment : Fragment? = null
 
     private lateinit var transaction: FragmentTransaction
 
@@ -55,8 +59,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
 
+        if (intent.hasExtra(Constants.NOTIFICATION_CONTENT)) {
+            val bundle: Bundle = intent.getParcelableExtra(Constants.NOTIFICATION_CONTENT)!!
+            Log.d("NamTV", "notify = ${bundle.getString(FirebaseConstants.KEY_USER_ID)}")
+            mainViewModel.isShowMapLayout.set(false)
+            gotoBookFragment()
+        }
+
         // TODO debug code
-        accountManager.saveIdDriver("idDriver_1")
+        accountManager.saveDriverId("idDriver_1")
 
         initDataMap()
         initView()
@@ -197,6 +208,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: SecurityException) {
             Log.e("NamTV", "MainActivity::updateLocationUI: SecurityException: $e")
         }
+    }
+
+    private fun gotoBookFragment() {
+        currentFragment = BookFragment()
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        transaction.add(R.id.fragmentBook, currentFragment as BookFragment).commit()
+        mainViewModel.isShowMapLayout.set(false)
     }
 
     companion object {

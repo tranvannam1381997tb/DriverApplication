@@ -16,6 +16,7 @@ class BaseViewModelFactory(private var context: Context) :
             modelClass.isAssignableFrom(MainViewModel::class.java) -> return MainViewModel(
                 context
             ) as T
+            modelClass.isAssignableFrom(SignUpViewModel::class.java) -> return SignUpViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
