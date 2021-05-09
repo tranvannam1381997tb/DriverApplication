@@ -111,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showDialogError(message: String?) {
         if (!message.isNullOrEmpty()) {
             val dialogError = ConfirmDialog(this)
-            dialogError.setTextDisplay(getString(R.string.error), message, null, getString(R.string.label_ok))
+            dialogError.setTextDisplay(getString(R.string.error), message, null, getString(R.string.ok))
             dialogError.setOnClickOK(View.OnClickListener {
                 dialogError.dismiss()
             })

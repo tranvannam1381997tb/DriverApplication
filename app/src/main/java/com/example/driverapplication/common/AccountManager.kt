@@ -78,7 +78,14 @@ class AccountManager private constructor() {
     }
 }
 
-enum class SexValue(val rawValue: Int) {
-    MALE(0),
-    FEMALE(1)
+enum class SexValue(val rawValue: String) {
+    MALE("Nam"),
+    FEMALE("Nữ")
+}
+
+enum class StatusDriver(val rawValue: Int) {
+    OFF(-1),
+    ON(0),
+    ARRIVING(1),
+    GOING(2)
 }

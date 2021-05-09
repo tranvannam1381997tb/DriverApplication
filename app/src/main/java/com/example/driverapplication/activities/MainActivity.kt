@@ -14,9 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.Constants
+import com.example.driverapplication.common.SexValue
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.fragments.BookFragment
+import com.example.driverapplication.model.BookInfo
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 import com.google.android.gms.location.*
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val bundle: Bundle = intent.getParcelableExtra(Constants.NOTIFICATION_CONTENT)!!
             Log.d("NamTV", "notify = ${bundle.getString(FirebaseConstants.KEY_USER_ID)}")
             mainViewModel.isShowMapLayout.set(false)
+            getInfoUserBook(bundle)
             gotoBookFragment()
         }
 
@@ -217,6 +220,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         transaction.addToBackStack(null)
         transaction.add(R.id.fragmentBook, currentFragment as BookFragment).commit()
         mainViewModel.isShowMapLayout.set(false)
+    }
+
+    private fun getInfoUserBook(bundle: Bundle) {
+        val bookInfo = BookInfo(
+            userId = bundle.getString(FirebaseConstants.KEY_USER_ID, ""),
+            tokenId = bundle.getString(FirebaseConstants.KEY_TOKEN_ID, ""),
+            name = bundle.getString(FirebaseConstants.KEY_NAME, ""),
+            age = bundle.getInt(FirebaseConstants.KEY_AGE, 0),
+            sex = getSexUser(bundle.getInt(FirebaseConstants.KEY_SEX, 0)),
+            phoneNumber = bundle.getString(FirebaseConstants.KEY_PHONE_NUMBER, ""),
+            startAddress = bundle.getString(FirebaseConstants.KEY_START_ADDRESS, ""),
+            endAddress = bundle.getString(FirebaseConstants.KEY_END_ADDRESS, ""),
+            price = bundle.getString(FirebaseConstants.KEY_PRICE, ""),
+            distance = bundle.getString(FirebaseConstants.KEY_DISTANCE, "")
+        )
+        mainViewModel.bookInfo = bookInfo
+    }
+
+    private fun getSexUser(sex: Int): String {
+        if (sex == 0) {
+            return SexValue.MALE.rawValue
+        } else {
+            return SexValue.FEMALE.rawValue
+        }
     }
 
     companion object {

@@ -112,6 +112,68 @@ class HttpConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
+    fun startArriving(jsonBody: JSONObject, callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_START_ARRIVING, HOST)
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            callback.invoke(true, it.toString())
+        }, Response.ErrorListener {
+            if (it.networkResponse != null) {
+                val statusCode = it.networkResponse.statusCode
+                if (statusCode == 400) {
+                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
+                    val error = dataError.getString("error")
+                    callback.invoke(false, error)
+                }
+            }
+
+            callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+                CONNECTION_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
+    fun startGoing(jsonBody: JSONObject, callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_START_GOING, HOST)
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            callback.invoke(true, it.toString())
+        }, Response.ErrorListener {
+            if (it.networkResponse != null) {
+                val statusCode = it.networkResponse.statusCode
+                if (statusCode == 400) {
+                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
+                    val error = dataError.getString("error")
+                    callback.invoke(false, error)
+                }
+            }
+
+            callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+                CONNECTION_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
     private fun requestHttps(http: HttpURLConnection): CompletionHandler {
         var inputStream: InputStream? = null
         var inputStreamReader: InputStreamReader? = null
@@ -161,6 +223,8 @@ class HttpConnection private constructor() {
     companion object {
         private const val URL_LOGIN_FORMAT = "http://%s/api/driver/login"
         private const val URL_SIGN_UP = "http://%s/api/driver/create"
+        private const val URL_START_ARRIVING = "http://%s/api/driver/arriving"
+        private const val URL_START_GOING = "http://%s/api/driver/going"
         private const val HOST = "192.168.1.215:3000"
         private const val CONNECTION_TIMEOUT = 30000
 

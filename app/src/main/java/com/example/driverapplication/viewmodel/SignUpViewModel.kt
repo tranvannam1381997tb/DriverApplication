@@ -7,7 +7,7 @@ class SignUpViewModel: ViewModel() {
     var name: String? = null
     var password: String? = null
     var age: Int? = null
-    var sex: Int? = null
+    var sex: String? = null
     var phoneNumber: String? = null
 
     var isCheckMale: ObservableField<Boolean> = ObservableField(true)

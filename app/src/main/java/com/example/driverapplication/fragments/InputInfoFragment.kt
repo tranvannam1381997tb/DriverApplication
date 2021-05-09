@@ -75,7 +75,11 @@ class InputInfoFragment : Fragment() {
         jsonInfo.put(DriverInfoKey.KeyPassword.rawValue, inputInfoViewModel.password)
         jsonInfo.put(DriverInfoKey.KeyName.rawValue, inputInfoViewModel.name)
         jsonInfo.put(DriverInfoKey.KeyAge.rawValue, inputInfoViewModel.age)
-        jsonInfo.put(DriverInfoKey.KeySex.rawValue, inputInfoViewModel.sex)
+        if (inputInfoViewModel.sex == SexValue.MALE.rawValue) {
+            jsonInfo.put(DriverInfoKey.KeySex.rawValue, 0)
+        } else {
+            jsonInfo.put(DriverInfoKey.KeySex.rawValue, 1)
+        }
         return jsonInfo
     }
 

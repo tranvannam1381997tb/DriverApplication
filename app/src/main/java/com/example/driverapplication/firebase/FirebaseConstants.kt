@@ -14,5 +14,18 @@ class FirebaseConstants {
         const val KEY_USER_ID = "userId"
         const val KEY_PRICE = "price"
         const val KEY_DISTANCE = "distance"
+        const val KEY_NAME = "name"
+        const val KEY_SEX = "sex"
+        const val KEY_AGE = "age"
+        const val KEY_PHONE_NUMBER = "phoneNumber"
+        const val KEY_SUCCESS = "success"
+
+        const val KEY_TO = "to"
+        const val KEY_DATA = "data"
+        const val KEY_AUTHORIZATION = "Authorization"
+        const val KEY_CONTENT_TYPE = "Content-Type"
+        const val FCM_API = "https://fcm.googleapis.com/fcm/send"
+        const val SERVER_KEY = "key=AAAATeiFcyw:APA91bG8McERiKb8mFwJvV337r3U5Z46ARLINXd5tgWbmWe-P4nHB_d3V5HvzugjmHgTo87KtMWev30APVmGCaPG2Npm9eq0BExRZKU0HvqpeeSnEF2BNp7ptlq5IBHKeBa6FQ65cgaI"
+        const val CONTENT_TYPE = "application/json"
     }
 }
