@@ -6,8 +6,6 @@ class MapsConstant {
     companion object {
         const val URL_DIRECTION = "https://maps.googleapis.com/maps/api/directions/json?origin=%s&destination=%s&key=%s"
         const val URL_FIND_PLACE = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=%s&key=%s"
-        const val URL_ENCODE_CHARSETS = "UTF-8"
-        const val BASE_URL_GOOGLE_MAP = "https://maps.googleapis.com"
         const val STATUS_OK = "OK"
 
         // google directions api key
@@ -18,6 +16,9 @@ class MapsConstant {
         const val DIRECTION_DURATION = "duration"
         const val DIRECTION_TEXT = "text"
         const val DIRECTION_VALUE = "value"
+        const val DIRECTION_STEPS = "steps"
+        const val DIRECTION_POLYLINE = "polyline"
+        const val DIRECTION_POINTS = "points"
 
         // google geocoding api key
         const val GEOCODING_RESULTS = "results"

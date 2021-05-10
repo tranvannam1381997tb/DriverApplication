@@ -24,9 +24,11 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
         val action = intent?.action
         if ("com.google.android.c2dm.intent.RECEIVE" == action || "com.google.firebase.messaging.RECEIVE_DIRECT_BOOT" == action) {
             Log.d("NamTV", "handleIntent")
-            val bundle = intent.extras
-            if (FirebaseUtils.validateInfoUser(bundle)) {
-                showNotification(DriverApplication.getAppContext(), "Có người book chuyến xe.", bundle!!)
+            if (intent.hasExtra(FirebaseConstants.KEY_BOOK_DRIVER)) {
+                val bundle = intent.getBundleExtra(FirebaseConstants.KEY_BOOK_DRIVER)
+                if (FirebaseUtils.validateInfoUser(bundle)) {
+                    showNotification(DriverApplication.getAppContext(), "Có người book chuyến xe.", bundle!!)
+                }
             }
         } else {
             super.handleIntent(intent)

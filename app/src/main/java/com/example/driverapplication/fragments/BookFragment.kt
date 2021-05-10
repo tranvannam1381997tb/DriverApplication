@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
+import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.StatusDriver
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
-import com.example.driverapplication.model.BookInfo
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
@@ -36,8 +36,16 @@ class BookFragment : Fragment() {
     }
 
     private fun setupEvent() {
-        binding.btnBook.setOnSingleClickListener(View.OnClickListener {
-            FirebaseConnection.getInstance().pushNotifySuccessBook(bookViewModel.bookInfo!!.tokenId)
+        binding.btnAgree.setOnSingleClickListener(View.OnClickListener {
+            FirebaseConnection.getInstance().pushNotifyAgreeBook(bookViewModel.bookInfo!!.tokenId) { isSuccess ->
+                if (isSuccess) {
+                    if (activity is MainActivity) {
+                        (activity as MainActivity).drawShortestWayToUser()
+                    }
+                } else {
+                    // TODO
+                }
+            }
             HttpConnection.getInstance().startArriving(getJSONArriving()) { isSuccess, dataResponse->
                 if (isSuccess) {
                     // TODO

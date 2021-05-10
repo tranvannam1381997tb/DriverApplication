@@ -18,6 +18,7 @@ import com.example.driverapplication.common.SexValue
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.fragments.BookFragment
+import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.BookInfo
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
@@ -244,6 +245,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             return SexValue.FEMALE.rawValue
         }
+    }
+
+    fun drawShortestWayToUser() {
+
+        // TODO
+        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo!!.startAddress)
     }
 
     companion object {

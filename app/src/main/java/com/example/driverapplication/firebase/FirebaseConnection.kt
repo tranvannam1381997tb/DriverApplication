@@ -6,10 +6,12 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.common.Constants
 import com.example.grabapplication.googlemaps.models.Distance
 import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONException
 import org.json.JSONObject
+import javax.security.auth.callback.Callback
 
 class FirebaseConnection private constructor() {
 
@@ -27,14 +29,19 @@ class FirebaseConnection private constructor() {
         }
     }
 
-    fun pushNotifySuccessBook(userTokenId: String) {
+    fun pushNotifyAgreeBook(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
         val notification = createBodyRequestPush(userTokenId)
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")
+                if (it.has(FirebaseConstants.KEY_SUCCESS) && it.getInt(FirebaseConstants.KEY_SUCCESS) == 1) {
+                    callback.invoke(true)
+                } else {
+                    callback.invoke(false)
+                }
             }, Response.ErrorListener {
-
+                callback.invoke(false)
                 Log.d("NamTV", "JsonObjectRequest Response.ErrorListener + $it")
             }) {
 
@@ -54,7 +61,7 @@ class FirebaseConnection private constructor() {
         val notificationBody = JSONObject()
 
         try {
-            notificationBody.put(FirebaseConstants.KEY_SUCCESS, 1)
+            notificationBody.put(FirebaseConstants.KEY_DRIVER_GOING, true)
             notification.put(FirebaseConstants.KEY_TO, userTokenId)
             notification.put(FirebaseConstants.KEY_DATA, notificationBody)
         } catch (e: JSONException) {

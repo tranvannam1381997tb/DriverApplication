@@ -1,5 +1,6 @@
 package com.example.driverapplication.googlemaps
 
+import android.graphics.Color
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -9,64 +10,59 @@ import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.CommonUtils
 import com.example.grabapplication.googlemaps.models.Distance
 import com.example.grabapplication.googlemaps.models.PlaceModel
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.PolyUtil
 import org.json.JSONObject
 import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 class MapsConnection private constructor() {
 
-//    fun drawShortestWay(googleMap: GoogleMap, latitude: Double, longitude: Double) {
-//        var maxDistance = 0
-//        val currentLocation = MainActivity.currentLocation
-//        val urlDirections = getMapsApiDirectionsUrl(currentLocation.latitude, currentLocation.longitude, latitude, longitude)
-//        val path: MutableList<List<LatLng>> = ArrayList()
-//        val directionsRequest = object : StringRequest(
-//            Method.GET,
-//            urlDirections,
-//            Response.Listener<String> { response ->
-//                val jsonResponse = JSONObject(response)
-//                // Get routes
-//                val routes = CommonUtils.getJsonArrayFromJsonObject(
-//                    jsonResponse,
-//                    MapsConstant.DIRECTION_ROUTES
-//                )
-//                val legs = CommonUtils.getJsonArrayFromJsonObject(
-//                    routes.getJSONObject(0),
-//                    MapsConstant.DIRECTION_LEGS
-//                )
-//                val step = CommonUtils.getJsonArrayFromJsonObject(
-//                    legs.getJSONObject(0),
-//                    MapsConstant.DIRECTION_STEPS
-//                )
-//                for (i in 0 until step.length()) {
-//                    val polyline = CommonUtils.getJsonObjectFromJsonObject(
-//                        step.getJSONObject(i),
-//                        MapsConstant.DIRECTION_POLYLINE
-//                    )
-//                    val points = CommonUtils.getStringFromJsonObject(
-//                        polyline,
-//                        MapsConstant.DIRECTION_POINTS
-//                    )
-//                    path.add(PolyUtil.decode(points))
-//
-//                    val distance = CommonUtils.getJsonObjectFromJsonObject(
-//                        step.getJSONObject(i),
-//                        "distance"
-//                    )
-//                    val value = CommonUtils.getFloatFromJsonObject(distance, "value")
-//                    if (maxDistance < value) {
-//                        maxDistance = value.toInt()
-//                    }
-//                }
-//                for (i in 0 until path.size) {
-//                    googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
-//                }
-//            },
-//            Response.ErrorListener {
-//            }){}
-//        val requestQueue = Volley.newRequestQueue(GrabApplication.getAppContext())
-//        requestQueue.add(directionsRequest)
-//    }
+    fun drawShortestWay(googleMap: GoogleMap, startAddress: String) {
+        var maxDistance = 0
+        val currentLocation = AccountManager.getInstance().getLocationDriver()
+        val urlDirections = getMapsApiDirectionsUrl(currentLocation.latitude, currentLocation.longitude, 1.0, 1.0)
+        val path: MutableList<List<LatLng>> = ArrayList()
+        val directionsRequest = object : StringRequest(
+            Method.GET,
+            urlDirections,
+            Response.Listener<String> { response ->
+                val jsonResponse = JSONObject(response)
+                // Get routes
+                val routes = CommonUtils.getJsonArrayFromJsonObject(
+                    jsonResponse,
+                    MapsConstant.DIRECTION_ROUTES
+                )
+                val legs = CommonUtils.getJsonArrayFromJsonObject(
+                    routes.getJSONObject(0),
+                    MapsConstant.DIRECTION_LEGS
+                )
+                val step = CommonUtils.getJsonArrayFromJsonObject(
+                    legs.getJSONObject(0),
+                    MapsConstant.DIRECTION_STEPS
+                )
+                for (i in 0 until step.length()) {
+                    val polyline = CommonUtils.getJsonObjectFromJsonObject(
+                        step.getJSONObject(i),
+                        MapsConstant.DIRECTION_POLYLINE
+                    )
+                    val points = CommonUtils.getStringFromJsonObject(
+                        polyline,
+                        MapsConstant.DIRECTION_POINTS
+                    )
+                    path.add(PolyUtil.decode(points))
+                }
+                for (i in 0 until path.size) {
+                    googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                }
+            },
+            Response.ErrorListener {
+            }){}
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(directionsRequest)
+    }
 
     fun getShortestWay(latitude: Double, longitude: Double, callback: (Distance) -> Unit) {
         var min = 0
