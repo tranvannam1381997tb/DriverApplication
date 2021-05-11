@@ -17,6 +17,7 @@ import com.example.driverapplication.firebase.FirebaseConstants
 
 import com.example.driverapplication.firebase.FirebaseUtils
 import com.google.firebase.messaging.FirebaseMessagingService
+import org.json.JSONObject
 
 class DriverFirebaseMessagingService : FirebaseMessagingService() {
     private val notificationChannelId = "Driver Application tét"
@@ -25,9 +26,9 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
         if ("com.google.android.c2dm.intent.RECEIVE" == action || "com.google.firebase.messaging.RECEIVE_DIRECT_BOOT" == action) {
             Log.d("NamTV", "handleIntent")
             if (intent.hasExtra(FirebaseConstants.KEY_BOOK_DRIVER)) {
-                val bundle = intent.getBundleExtra(FirebaseConstants.KEY_BOOK_DRIVER)
-                if (FirebaseUtils.validateInfoUser(bundle)) {
-                    showNotification(DriverApplication.getAppContext(), "Có người book chuyến xe.", bundle!!)
+                val jsonData = intent.getStringExtra(FirebaseConstants.KEY_BOOK_DRIVER)!!
+                if (FirebaseUtils.validateInfoUser(jsonData)) {
+                    showNotification(DriverApplication.getAppContext(), "Có người book chuyến xe.", jsonData)
                 }
             }
         } else {
@@ -40,21 +41,24 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("NamTV", "New Device Token $token")
     }
 
-    private fun showNotification(context: Context, message: String, bundle: Bundle) {
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+
+    }
+
+    private fun showNotification(context: Context, message: String, jsonData: String) {
         val mNotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                    notificationChannelId,
-                    "Driver Application",
-                    NotificationManager.IMPORTANCE_HIGH
-            )
-            channel.description = "Driver Application"
-            mNotificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+                notificationChannelId,
+                "Driver Application",
+                NotificationManager.IMPORTANCE_HIGH
+        )
+        channel.description = "Driver Application"
+        mNotificationManager.createNotificationChannel(channel)
         val notifyIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(Constants.NOTIFICATION_CONTENT, bundle)
+            putExtra(Constants.NOTIFICATION_CONTENT, jsonData)
         }
         val pendingIntent = PendingIntent.getActivity(
                 context,

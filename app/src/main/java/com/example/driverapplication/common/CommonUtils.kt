@@ -106,5 +106,13 @@ class CommonUtils {
             val inputMethod: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethod.hideSoftInputFromWindow(activity.currentFocus!!.windowToken!!, 0)
         }
+
+        fun getSexValue(sex: Int): String {
+            return if (sex == 0) {
+                SexValue.MALE.rawValue
+            } else {
+                SexValue.FEMALE.rawValue
+            }
+        }
     }
 }

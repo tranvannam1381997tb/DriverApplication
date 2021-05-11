@@ -1,11 +1,11 @@
 package com.example.driverapplication.firebase
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.util.Log
 import com.example.driverapplication.common.Constants
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DataSnapshot
+import org.json.JSONException
+import org.json.JSONObject
 import java.time.format.DateTimeFormatter
 
 class FirebaseUtils {
@@ -53,27 +53,32 @@ class FirebaseUtils {
             return ""
         }
 
-        fun validateInfoUser(bundle: Bundle?): Boolean {
-            if (bundle == null) {
+        fun validateInfoUser(jsonData: String?): Boolean {
+            if (jsonData.isNullOrEmpty()) {
                 return false
             }
-            if (bundle.getString(FirebaseConstants.KEY_START_ADDRESS).isNullOrEmpty()) {
-                return false
-            }
-            if (bundle.getString(FirebaseConstants.KEY_END_ADDRESS).isNullOrEmpty()) {
-                return false
-            }
-            if (bundle.getString(FirebaseConstants.KEY_USER_ID).isNullOrEmpty()) {
-                return false
-            }
-            if (bundle.getString(FirebaseConstants.KEY_PRICE).isNullOrEmpty()) {
-                return false
-            }
-            if (bundle.getString(FirebaseConstants.KEY_DISTANCE).isNullOrEmpty()) {
-                return false
-            }
+            try {
+                val jsonObject = JSONObject(jsonData)
 
-            return true
+                if (jsonObject.getString(FirebaseConstants.KEY_START_ADDRESS).isNullOrEmpty()) {
+                    return false
+                }
+                if (jsonObject.getString(FirebaseConstants.KEY_END_ADDRESS).isNullOrEmpty()) {
+                    return false
+                }
+                if (jsonObject.getString(FirebaseConstants.KEY_USER_ID).isNullOrEmpty()) {
+                    return false
+                }
+                if (jsonObject.getString(FirebaseConstants.KEY_PRICE).isNullOrEmpty()) {
+                    return false
+                }
+                if (jsonObject.getString(FirebaseConstants.KEY_DISTANCE).isNullOrEmpty()) {
+                    return false
+                }
+                return true
+            } catch (e: JSONException) {
+                return false
+            }
         }
     }
 }

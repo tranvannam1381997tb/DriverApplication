@@ -10,6 +10,9 @@ class Constants {
         const val DATE_FORMAT_APP = "dd, MMM yyyy"
         const val NOTIFICATION_CONTENT = "notification_content"
 
+        const val FRAGMENT_MAP = 0
+        const val FRAGMENT_BOOK = 1
+
         val DEFAULT_LOCATION = LatLng(-33.8523341, 151.2106085)
     }
 }

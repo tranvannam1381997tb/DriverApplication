@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.StatusDriver
@@ -15,6 +16,7 @@ import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.shared_preferences.AppPreferences
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 import org.json.JSONObject
@@ -39,6 +41,7 @@ class BookFragment : Fragment() {
         binding.btnAgree.setOnSingleClickListener(View.OnClickListener {
             FirebaseConnection.getInstance().pushNotifyAgreeBook(bookViewModel.bookInfo!!.tokenId) { isSuccess ->
                 if (isSuccess) {
+                    AppPreferences.getInstance(requireActivity()).saveBookInfoToPreferences(bookViewModel.bookInfo!!)
                     if (activity is MainActivity) {
                         (activity as MainActivity).drawShortestWayToUser()
                     }
@@ -54,7 +57,11 @@ class BookFragment : Fragment() {
         })
 
         binding.btnCancel.setOnSingleClickListener(View.OnClickListener {
-
+            FirebaseConnection.getInstance().pushNotifyRejectBook(bookViewModel.bookInfo!!.tokenId) {
+                if (activity is MainActivity) {
+                    (activity as MainActivity).gotoMapFragment()
+                }
+            }
         })
     }
 

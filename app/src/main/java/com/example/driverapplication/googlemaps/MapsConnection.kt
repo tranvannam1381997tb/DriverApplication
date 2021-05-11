@@ -20,42 +20,46 @@ import kotlin.collections.ArrayList
 
 class MapsConnection private constructor() {
 
-    fun drawShortestWay(googleMap: GoogleMap, startAddress: String) {
-        var maxDistance = 0
+    fun drawShortestWay(googleMap: GoogleMap, endLatitude: Double, endLongitude: Double, callback: (Boolean) -> Unit) {
         val currentLocation = AccountManager.getInstance().getLocationDriver()
-        val urlDirections = getMapsApiDirectionsUrl(currentLocation.latitude, currentLocation.longitude, 1.0, 1.0)
+        val urlDirections = getMapsApiDirectionsUrl(currentLocation.latitude, currentLocation.longitude, endLatitude, endLongitude)
         val path: MutableList<List<LatLng>> = ArrayList()
         val directionsRequest = object : StringRequest(
             Method.GET,
             urlDirections,
             Response.Listener<String> { response ->
                 val jsonResponse = JSONObject(response)
-                // Get routes
-                val routes = CommonUtils.getJsonArrayFromJsonObject(
-                    jsonResponse,
-                    MapsConstant.DIRECTION_ROUTES
-                )
-                val legs = CommonUtils.getJsonArrayFromJsonObject(
-                    routes.getJSONObject(0),
-                    MapsConstant.DIRECTION_LEGS
-                )
-                val step = CommonUtils.getJsonArrayFromJsonObject(
-                    legs.getJSONObject(0),
-                    MapsConstant.DIRECTION_STEPS
-                )
-                for (i in 0 until step.length()) {
-                    val polyline = CommonUtils.getJsonObjectFromJsonObject(
-                        step.getJSONObject(i),
-                        MapsConstant.DIRECTION_POLYLINE
+                val status =
+                    CommonUtils.getStringFromJsonObject(jsonResponse, MapsConstant.DIRECTION_STATUS)
+                if (status == MapsConstant.STATUS_OK) {
+                    // Get routes
+                    val routes = CommonUtils.getJsonArrayFromJsonObject(
+                        jsonResponse,
+                        MapsConstant.DIRECTION_ROUTES
                     )
-                    val points = CommonUtils.getStringFromJsonObject(
-                        polyline,
-                        MapsConstant.DIRECTION_POINTS
+                    val legs = CommonUtils.getJsonArrayFromJsonObject(
+                        routes.getJSONObject(0),
+                        MapsConstant.DIRECTION_LEGS
                     )
-                    path.add(PolyUtil.decode(points))
-                }
-                for (i in 0 until path.size) {
-                    googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                    val step = CommonUtils.getJsonArrayFromJsonObject(
+                        legs.getJSONObject(0),
+                        MapsConstant.DIRECTION_STEPS
+                    )
+                    for (i in 0 until step.length()) {
+                        val polyline = CommonUtils.getJsonObjectFromJsonObject(
+                            step.getJSONObject(i),
+                            MapsConstant.DIRECTION_POLYLINE
+                        )
+                        val points = CommonUtils.getStringFromJsonObject(
+                            polyline,
+                            MapsConstant.DIRECTION_POINTS
+                        )
+                        path.add(PolyUtil.decode(points))
+                    }
+                    for (i in 0 until path.size) {
+                        googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                    }
+                    callback.invoke(true)
                 }
             },
             Response.ErrorListener {

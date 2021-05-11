@@ -13,10 +13,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.common.CommonUtils
 import com.example.driverapplication.common.Constants
-import com.example.driverapplication.common.SexValue
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
+import com.example.driverapplication.firebase.FirebaseManager
 import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.BookInfo
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -47,7 +50,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 AccountManager.getInstance()
             }
 
-    private var currentFragment : Fragment? = null
+    private var fragmentBook : Fragment? = null
+    var currentFragment = Constants.FRAGMENT_MAP
 
     private lateinit var transaction: FragmentTransaction
 
@@ -63,10 +67,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.viewModel = mainViewModel
 
         if (intent.hasExtra(Constants.NOTIFICATION_CONTENT)) {
-            val bundle: Bundle = intent.getParcelableExtra(Constants.NOTIFICATION_CONTENT)!!
-            Log.d("NamTV", "notify = ${bundle.getString(FirebaseConstants.KEY_USER_ID)}")
+            val jsonData = intent.getStringExtra(Constants.NOTIFICATION_CONTENT)!!
+            val jsonObject = JSONObject(jsonData)
+            Log.d("NamTV", "notify = ${jsonObject.getString(FirebaseConstants.KEY_USER_ID)}")
             mainViewModel.isShowMapLayout.set(false)
-            getInfoUserBook(bundle)
+            getInfoUserBook(jsonObject)
             gotoBookFragment()
         }
 
@@ -132,6 +137,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onBackPressed() {
+        if (currentFragment == Constants.FRAGMENT_BOOK) {
+            currentFragment = Constants.FRAGMENT_MAP
+            mainViewModel.isShowMapLayout.set(true)
+            gotoMapFragment()
+            return
+        }
+
+        super.onBackPressed()
     }
 
     /**
@@ -215,42 +231,61 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun gotoBookFragment() {
-        currentFragment = BookFragment()
+        fragmentBook = BookFragment()
+        currentFragment = Constants.FRAGMENT_BOOK
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.addToBackStack(null)
-        transaction.add(R.id.fragmentBook, currentFragment as BookFragment).commit()
+        transaction.add(R.id.fragmentBook, fragmentBook as BookFragment).commit()
         mainViewModel.isShowMapLayout.set(false)
     }
 
-    private fun getInfoUserBook(bundle: Bundle) {
+    private fun getInfoUserBook(jsonObject: JSONObject) {
         val bookInfo = BookInfo(
-            userId = bundle.getString(FirebaseConstants.KEY_USER_ID, ""),
-            tokenId = bundle.getString(FirebaseConstants.KEY_TOKEN_ID, ""),
-            name = bundle.getString(FirebaseConstants.KEY_NAME, ""),
-            age = bundle.getInt(FirebaseConstants.KEY_AGE, 0),
-            sex = getSexUser(bundle.getInt(FirebaseConstants.KEY_SEX, 0)),
-            phoneNumber = bundle.getString(FirebaseConstants.KEY_PHONE_NUMBER, ""),
-            startAddress = bundle.getString(FirebaseConstants.KEY_START_ADDRESS, ""),
-            endAddress = bundle.getString(FirebaseConstants.KEY_END_ADDRESS, ""),
-            price = bundle.getString(FirebaseConstants.KEY_PRICE, ""),
-            distance = bundle.getString(FirebaseConstants.KEY_DISTANCE, "")
+            userId = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_USER_ID),
+            tokenId = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_TOKEN_ID),
+            name = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_NAME),
+            age = CommonUtils.getIntFromJsonObject(jsonObject, FirebaseConstants.KEY_AGE),
+            sex = CommonUtils.getSexValue(CommonUtils.getIntFromJsonObject(jsonObject, FirebaseConstants.KEY_SEX)),
+            phoneNumber = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_PHONE_NUMBER),
+            startAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_START_ADDRESS),
+            endAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_END_ADDRESS),
+            price = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_PRICE),
+            distance = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_DISTANCE)
         )
         mainViewModel.bookInfo = bookInfo
     }
 
-    private fun getSexUser(sex: Int): String {
-        if (sex == 0) {
-            return SexValue.MALE.rawValue
-        } else {
-            return SexValue.FEMALE.rawValue
+    fun drawShortestWayToUser() {
+        FirebaseManager.getInstance().getLocationUser(mainViewModel.bookInfo!!.userId) { latitude, longitude ->
+            MapsConnection.getInstance().drawShortestWay(map!!, latitude, longitude) {
+                addMarkerUser(latitude, longitude)
+            }
+            gotoMapFragment()
         }
     }
 
-    fun drawShortestWayToUser() {
+    fun gotoMapFragment() {
+        currentFragment = Constants.FRAGMENT_MAP
+        fragmentBook = null
+        for (fragment in supportFragmentManager.fragments) {
+            if (fragment !is SupportMapFragment) {
+                supportFragmentManager.beginTransaction().remove(fragment).commit()
+            }
+        }
+        mainViewModel.isShowMapLayout.set(true)
+    }
 
-        // TODO
-        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo!!.startAddress)
+    private fun addMarkerUser(latitude: Double, longitude: Double) {
+        val markerOption = MarkerOptions().apply {
+            position(LatLng(driverInfo.latitude, driverInfo.longitude))
+            icon(bitmapFromVector(com.google.android.gms.location.R.drawable.motocross))
+            title(driverInfo.name)
+            snippet(driverInfo.rate.toString())
+        }
+        val marker = map!!.addMarker(markerOption)
+        marker.tag = driverInfo.idDriver
+        driverHashMap[driverInfo.idDriver] = marker
     }
 
     companion object {

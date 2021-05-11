@@ -22,7 +22,9 @@ class FirebaseConstants {
         const val KEY_BOOK_DRIVER = "bookDriver"
 
         // Key driver send
+        const val KEY_DRIVER_RESPONSE = "driverResponse"
         const val KEY_DRIVER_GOING = "driverGoing"
+        const val KEY_DRIVER_REJECT = "driverReject"
 
         const val KEY_TO = "to"
         const val KEY_DATA = "data"
