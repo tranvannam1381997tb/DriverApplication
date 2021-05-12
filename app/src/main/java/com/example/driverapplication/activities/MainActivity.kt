@@ -2,6 +2,8 @@ package com.example.driverapplication.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONObject
@@ -256,13 +260,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.bookInfo = bookInfo
     }
 
-    fun drawShortestWayToUser() {
+    private fun drawShortestWayToUser() {
         FirebaseManager.getInstance().getLocationUser(mainViewModel.bookInfo!!.userId) { latitude, longitude ->
             MapsConnection.getInstance().drawShortestWay(map!!, latitude, longitude) {
                 addMarkerUser(latitude, longitude)
             }
             gotoMapFragment()
         }
+    }
+
+    fun handleEventAgreeBook() {
+        mainViewModel.isShowingLayoutBottom.set(true)
+        drawShortestWayToUser()
     }
 
     fun gotoMapFragment() {
@@ -278,14 +287,41 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun addMarkerUser(latitude: Double, longitude: Double) {
         val markerOption = MarkerOptions().apply {
-            position(LatLng(driverInfo.latitude, driverInfo.longitude))
-            icon(bitmapFromVector(com.google.android.gms.location.R.drawable.motocross))
-            title(driverInfo.name)
-            snippet(driverInfo.rate.toString())
+            position(LatLng(latitude, longitude))
+            icon(bitmapFromVector(R.drawable.person))
         }
-        val marker = map!!.addMarker(markerOption)
-        marker.tag = driverInfo.idDriver
-        driverHashMap[driverInfo.idDriver] = marker
+        map!!.addMarker(markerOption)
+    }
+
+    private fun bitmapFromVector(vectorResId: Int): BitmapDescriptor? {
+        // below line is use to generate a drawable.
+        val vectorDrawable = ContextCompat.getDrawable(this, vectorResId)
+
+        // below line is use to set bounds to our vector drawable.
+        vectorDrawable!!.setBounds(
+                0,
+                0,
+                vectorDrawable.intrinsicWidth,
+                vectorDrawable.intrinsicHeight
+        )
+
+        // below line is use to create a bitmap for our
+        // drawable which we have added.
+        val bitmap = Bitmap.createBitmap(
+                vectorDrawable.intrinsicWidth,
+                vectorDrawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+        )
+
+        // below line is use to add bitmap in our canvas.
+        val canvas = Canvas(bitmap)
+
+        // below line is use to draw our
+        // vector drawable in canvas.
+        vectorDrawable.draw(canvas)
+
+        // after generating our bitmap we are returning our bitmap.
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     companion object {

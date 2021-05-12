@@ -43,7 +43,7 @@ class BookFragment : Fragment() {
                 if (isSuccess) {
                     AppPreferences.getInstance(requireActivity()).saveBookInfoToPreferences(bookViewModel.bookInfo!!)
                     if (activity is MainActivity) {
-                        (activity as MainActivity).drawShortestWayToUser()
+                        (activity as MainActivity).handleEventAgreeBook()
                     }
                 } else {
                     // TODO

@@ -54,4 +54,6 @@
 	<string name="price">Giá tiền: </string>
 	<string name="pick_up">Nhận cuốc</string>
 
+	// Main Activity
+	<string name="arrived">Bạn đã đến nơi</string>
 </resources>

@@ -12,6 +12,7 @@ import com.example.grabapplication.googlemaps.models.Distance
 import com.example.grabapplication.googlemaps.models.PlaceModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import org.json.JSONObject
@@ -19,6 +20,8 @@ import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 class MapsConnection private constructor() {
+
+    private val polylines = ArrayList<Polyline>()
 
     fun drawShortestWay(googleMap: GoogleMap, endLatitude: Double, endLongitude: Double, callback: (Boolean) -> Unit) {
         val currentLocation = AccountManager.getInstance().getLocationDriver()
@@ -45,6 +48,7 @@ class MapsConnection private constructor() {
                         legs.getJSONObject(0),
                         MapsConstant.DIRECTION_STEPS
                     )
+                    clearPolyline()
                     for (i in 0 until step.length()) {
                         val polyline = CommonUtils.getJsonObjectFromJsonObject(
                             step.getJSONObject(i),
@@ -57,7 +61,8 @@ class MapsConnection private constructor() {
                         path.add(PolyUtil.decode(points))
                     }
                     for (i in 0 until path.size) {
-                        googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                        val polyline = googleMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                        polylines.add(polyline)
                     }
                     callback.invoke(true)
                 }
@@ -66,6 +71,12 @@ class MapsConnection private constructor() {
             }){}
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(directionsRequest)
+    }
+
+    fun clearPolyline() {
+        for (polyline in polylines) {
+            polyline.remove()
+        }
     }
 
     fun getShortestWay(latitude: Double, longitude: Double, callback: (Distance) -> Unit) {

@@ -57,5 +57,28 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_header"
             android:visibility="@{viewModel.isShowMapLayout ? View.GONE : View.VISIBLE}"/>
+
+	    <androidx.constraintlayout.widget.ConstraintLayout
+		    android:id="@+id/layoutBottom"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    app:layout_constraintBottom_toBottomOf="parent"
+		    android:visibility="@{viewModel.isShowingLayoutBottom ? View.VISIBLE : View.GONE}"
+		    android:padding="20dp">
+
+		    <Button
+			    android:id="@+id/btnArrived"
+			    style="@style/Widget.Button.Simple"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginBottom="30dp"
+			    android:background="@drawable/button_style"
+			    android:paddingStart="16dp"
+			    android:paddingEnd="16dp"
+			    android:text="@string/arrived"
+			    app:layout_constraintBottom_toBottomOf="parent"
+			    app:layout_constraintEnd_toEndOf="parent"
+			    app:layout_constraintStart_toStartOf="parent" />
+	    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
