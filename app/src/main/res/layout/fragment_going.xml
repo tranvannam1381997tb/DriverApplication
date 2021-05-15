@@ -23,12 +23,22 @@
 			android:orientation="vertical"
 			app:layout_constraintTop_toTopOf="parent">
 
+			<TextView
+				android:id="@+id/description"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_description"
+				android:textStyle="bold"
+				tools:text="@string/description_arrived_origin"/>
+
 			<LinearLayout
 				android:id="@+id/layout_info_user"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center"
-				android:layout_marginTop="10dp"
+				android:layout_marginTop="20dp"
 				android:gravity="start"
 				android:orientation="horizontal">
 
@@ -141,10 +151,10 @@
 			android:background="@drawable/button_style"
 			android:paddingStart="16dp"
 			android:paddingEnd="16dp"
-			android:text="@string/arrived"
 			app:layout_constraintTop_toBottomOf="@id/layout_info_driver"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent" />
+			app:layout_constraintStart_toStartOf="parent"
+			tools:text="@string/arrived_origin"/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

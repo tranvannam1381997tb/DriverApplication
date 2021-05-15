@@ -28,7 +28,7 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
             if (intent.hasExtra(FirebaseConstants.KEY_BOOK_DRIVER)) {
                 val jsonData = intent.getStringExtra(FirebaseConstants.KEY_BOOK_DRIVER)!!
                 if (FirebaseUtils.validateInfoUser(jsonData)) {
-                    showNotification(DriverApplication.getAppContext(), "Có người book chuyến xe.", jsonData)
+                    bookListener?.handleBookRequest(JSONObject(jsonData))
                 }
             }
         } else {
@@ -46,48 +46,11 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
 
     }
 
-    private fun showNotification(context: Context, message: String, jsonData: String) {
-        val mNotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(
-                notificationChannelId,
-                "Driver Application",
-                NotificationManager.IMPORTANCE_HIGH
-        )
-        channel.description = "Driver Application"
-        mNotificationManager.createNotificationChannel(channel)
-        val notifyIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(Constants.NOTIFICATION_CONTENT, jsonData)
-        }
-        val pendingIntent = PendingIntent.getActivity(
-                context,
-                System.currentTimeMillis().toInt(),
-                notifyIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val mBuilder = NotificationCompat.Builder(context, notificationChannelId)
-                .setSmallIcon(R.drawable.icon_notify) // notification icon
-                .setContentText(message)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(message))// message for notification
-                .setAutoCancel(true) // clear notification after click
-                .setGroup("driver_group")
-                .setGroupSummary(false)
-                .setPriority(NotificationManager.IMPORTANCE_MAX)
-                .setContentIntent(pendingIntent)
-
-        val mBuilderSummary = NotificationCompat.Builder(context, notificationChannelId)
-                .setSmallIcon(R.drawable.icon_notify)
-                .setPriority(NotificationManager.IMPORTANCE_MAX)
-                .setAutoCancel(true)
-                .setGroup("driver_group")
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
-                .setGroupSummary(true)
-                .setContentIntent(pendingIntent)
-
-        mNotificationManager.notify(System.currentTimeMillis().toInt(), mBuilder.build())
-        mNotificationManager.notify(0, mBuilderSummary.build())
-        Log.d("NamTV", "set notify")
+    companion object {
+        var bookListener: BookListener? = null
     }
+}
+
+interface BookListener {
+    fun handleBookRequest(jsonData: JSONObject)
 }

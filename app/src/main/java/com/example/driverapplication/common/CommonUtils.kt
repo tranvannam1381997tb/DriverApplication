@@ -2,16 +2,21 @@ package com.example.driverapplication.common
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.content.ContextCompat.getSystemService
+import com.example.driverapplication.DriverApplication
 import com.google.firebase.database.DataSnapshot
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 class CommonUtils {
     companion object {
@@ -113,6 +118,11 @@ class CommonUtils {
             } else {
                 SexValue.FEMALE.rawValue
             }
+        }
+
+        fun vibrateDevice() {
+            val vibrator = DriverApplication.getAppContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 }

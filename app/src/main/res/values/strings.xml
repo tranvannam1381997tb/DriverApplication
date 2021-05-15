@@ -56,15 +56,26 @@
 	<string name="error_input_license_plate_number">Bạn chưa nhập biển số xe</string>
 
 	//Book Fragment
-	<string name="description_info">Thông tin cuốc xe</string>
+	<string name="description_info">Có người đặt xe</string>
 	<string name="name">Họ tên</string>
 	<string name="start_address">Nơi đón: </string>
 	<string name="end_address">Điểm đến: </string>
 	<string name="distance">Quãng đường: </string>
 	<string name="price">Giá tiền: </string>
 	<string name="pick_up">Nhận cuốc</string>
+	<string name="desciption_book">Thông tin chuyến xe</string>
 
-	// Main Activity
-	<string name="arrived">Bạn đã đến nơi</string>
+	// Going Fragment
+	<string name="description_arrived_origin">Đang đón khách hàng</string>
+	<string name="arrived_origin">Đã đến nơi đón</string>
+	
+	<string name="description_waiting_user">Đang chờ khách hàng</string>
+	<string name="going">Bắt đầu chuyến đi</string>
+	
+	<string name="description_going">Đang thực hiện cuốc xe</string>
+	<string name="arrived_destination">Đã đến điểm đến</string>
+
+	<string name="description_final_book">Kết thúc chuyến đi</string>
+	<string name="bill">Tính tiền</string>
 
 </resources>

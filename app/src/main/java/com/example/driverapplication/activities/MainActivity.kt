@@ -24,6 +24,8 @@ import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.fragments.GoingFragment
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.BookInfo
+import com.example.driverapplication.services.BookListener
+import com.example.driverapplication.services.DriverFirebaseMessagingService
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 import com.google.android.gms.location.*
@@ -71,19 +73,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
 
-        if (intent.hasExtra(Constants.NOTIFICATION_CONTENT)) {
-            val jsonData = intent.getStringExtra(Constants.NOTIFICATION_CONTENT)!!
-            val jsonObject = JSONObject(jsonData)
-            Log.d("NamTV", "notify = ${jsonObject.getString(FirebaseConstants.KEY_USER_ID)}")
-            getInfoUserBook(jsonObject)
-            gotoBookFragment()
-        }
-
         // TODO debug code
         accountManager.saveDriverId("idDriver_1")
 
         initDataMap()
         initView()
+        setupEvent()
         accountManager.getTokenIdDevice {  }
     }
 
@@ -100,8 +95,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         transaction = supportFragmentManager.beginTransaction()
 
-        binding.imgBack.setOnClickListener {
-            onBackPressed()
+    }
+
+
+    private fun setupEvent() {
+        DriverFirebaseMessagingService.bookListener = object : BookListener {
+
+            override fun handleBookRequest(jsonData: JSONObject) {
+                if (!mainViewModel.isShowingLayoutBottom.get()!!) {
+                    Log.d("NamTV", "notify = ${jsonData.getString(FirebaseConstants.KEY_USER_ID)}")
+                    getInfoUserBook(jsonData)
+                    mainViewModel.isShowingLayoutBook.set(true)
+                    CommonUtils.vibrateDevice()
+                    gotoBookFragment()
+                }
+            }
+
         }
     }
 
@@ -238,8 +247,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         currentFragment = Constants.FRAGMENT_BOOK
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.add(R.id.fragmentBook, fragmentBook as BookFragment).commit()
+        transaction.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_top,
+            R.anim.pop_in_bottom,
+            R.anim.pop_out_top
+        )
+        transaction.replace(R.id.fragmentBook, fragmentBook as BookFragment).commit()
     }
 
     private fun getInfoUserBook(jsonObject: JSONObject) {
@@ -263,18 +277,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             MapsConnection.getInstance().drawShortestWay(map!!, latitude, longitude) {
                 addMarkerUser(latitude, longitude)
             }
-            gotoMapFragment()
         }
     }
 
     fun handleEventAgreeBook() {
+        mainViewModel.isShowingLayoutBook.set(false)
         mainViewModel.isShowingLayoutBottom.set(true)
-        gotoGoingFragment()
+        gotoGoingFragment(GoingFragment.STATUS_GOING_PICK_UP)
         drawShortestWayToUser()
+    }
+
+    fun handleEventArrivedOrigin() {
+        mainViewModel.isShowingLayoutBottom.set(true)
+        gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)
+    }
+
+    fun handleEventGoing() {
+        mainViewModel.isShowingLayoutBottom.set(true)
+        gotoGoingFragment(GoingFragment.STATUS_GOING)
+    }
+
+    fun handleEventArrivedDestination() {
+        mainViewModel.isShowingLayoutBottom.set(true)
+        gotoGoingFragment(GoingFragment.STATUS_ARRIVED_DESTINATION)
+    }
+
+    fun handleEventBill() {
+
     }
 
     fun gotoMapFragment() {
         currentFragment = Constants.FRAGMENT_MAP
+        mainViewModel.isShowingLayoutBottom.set(false)
+        mainViewModel.isShowingLayoutBook.set(false)
         fragmentBook = null
         for (fragment in supportFragmentManager.fragments) {
             if (fragment !is SupportMapFragment) {
@@ -283,13 +318,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun gotoGoingFragment() {
+    private fun gotoGoingFragment(statusGoingFragment: Int) {
         fragmentBook = GoingFragment()
         currentFragment = Constants.FRAGMENT_GOING
 
+        val bundle = Bundle()
+        bundle.putInt(GoingFragment.STATUS_GOING_FRAGMENT, statusGoingFragment)
+        fragmentBook!!.arguments = bundle
+
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.add(R.id.fragmentBook, fragmentBook as GoingFragment).commit()
+        transaction.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_top,
+            R.anim.pop_in_bottom,
+            R.anim.pop_out_top
+        )
+        transaction.replace(R.id.fragmentBottom, fragmentBook as GoingFragment).commit()
+    }
+
+    private fun gotoFragmentBill() {
+
     }
 
     private fun addMarkerUser(latitude: Double, longitude: Double) {
