@@ -9,8 +9,12 @@ class SignUpViewModel: ViewModel() {
     var age: Int? = null
     var sex: String? = null
     var phoneNumber: String? = null
+    var typeVehicle: String? = null
+    var licensePlateNumber: String? = null
+    var typeDriver: String? = null
 
     var isCheckMale: ObservableField<Boolean> = ObservableField(true)
+    var isCheckGrabBike: ObservableField<Boolean> = ObservableField(true)
 
     var onClickSignUpScreenListener: OnClickSignUpScreenListener? = null
 
@@ -21,10 +25,20 @@ class SignUpViewModel: ViewModel() {
     fun checkRadioFemale() {
         isCheckMale.set(false)
     }
+
+    fun checkRadioGrabBike() {
+        isCheckGrabBike.set(true)
+    }
+
+    fun checkRadioGrabCar() {
+        isCheckGrabBike.set(false)
+    }
 }
 
 interface OnClickSignUpScreenListener {
     fun clickBtnNextInputPhoneNumber()
 
     fun clickBtnNextInputPassword()
+
+    fun clickBtnNextInputInfo()
 }

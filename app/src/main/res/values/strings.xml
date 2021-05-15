@@ -31,7 +31,7 @@
 	<string name="next">Tiếp</string>
 	<string name="description_input_phone_number">Nhập số di động của bạn</string>
 	<string name="description_input_password">Nhập mật khẩu</string>
-	<string name="description_input_info">Nhập thông tin khác</string>
+	<string name="description_input_info">Nhập thông tin cá nhân</string>
 	<string name="input_name">Nhập họ và tên của bạn</string>
 	<string name="hint_input_name">Trần Văn Nam</string>
 	<string name="sex">Chọn giới tính</string>
@@ -45,6 +45,16 @@
 	<string name="error_password_invalid">Mật khẩu không hợp lệ</string>
 	<string name="connect_server_error">Lỗi kết nối máy chủ</string>
 
+	// Input vehicle
+	<string name="description_input_vehicle">Nhập thông tin xe</string>
+	<string name="choose_type_driver">Chọn loại xe</string>
+	<string name="input_type_vehicle">Nhập dòng xe</string>
+	<string name="hint_input_type_vehicle">Honda Wawe</string>
+	<string name="input_license_plate_number">Biển số xe</string>
+	<string name="hint_input_license_plate_number">17B1-16315</string>
+	<string name="error_input_type_vehicle">Bạn chưa nhập dòng xe</string>
+	<string name="error_input_license_plate_number">Bạn chưa nhập biển số xe</string>
+
 	//Book Fragment
 	<string name="description_info">Thông tin cuốc xe</string>
 	<string name="name">Họ tên</string>
@@ -56,4 +66,5 @@
 
 	// Main Activity
 	<string name="arrived">Bạn đã đến nơi</string>
+
 </resources>

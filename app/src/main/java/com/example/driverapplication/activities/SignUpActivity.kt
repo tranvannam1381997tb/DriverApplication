@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.databinding.ActivitySignUpBinding
+import com.example.driverapplication.fragments.InputVehicleFragment
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.OnClickSignUpScreenListener
 import com.example.driverapplication.viewmodel.SignUpViewModel
@@ -41,6 +42,10 @@ class SignUpActivity : AppCompatActivity() {
                 gotoInputInfoFragment()
             }
 
+            override fun clickBtnNextInputInfo() {
+                gotoInputVehicleFragment()
+            }
+
         }
     }
 
@@ -61,6 +66,19 @@ class SignUpActivity : AppCompatActivity() {
         )
         transaction.addToBackStack(null)
         transaction.add(R.id.fragmentContent, fragmentContent as InputPasswordFragment).commit()
+    }
+
+    private fun gotoInputVehicleFragment() {
+        fragmentContent = InputVehicleFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.enter,
+            R.anim.exit,
+            R.anim.pop_enter,
+            R.anim.pop_exit
+        )
+        transaction.addToBackStack(null)
+        transaction.add(R.id.fragmentContent, fragmentContent as InputVehicleFragment).commit()
     }
 
     private fun gotoInputInfoFragment() {

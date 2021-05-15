@@ -21,6 +21,7 @@ import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.firebase.FirebaseManager
 import com.example.driverapplication.fragments.BookFragment
+import com.example.driverapplication.fragments.GoingFragment
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.BookInfo
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val jsonData = intent.getStringExtra(Constants.NOTIFICATION_CONTENT)!!
             val jsonObject = JSONObject(jsonData)
             Log.d("NamTV", "notify = ${jsonObject.getString(FirebaseConstants.KEY_USER_ID)}")
-            mainViewModel.isShowMapLayout.set(false)
             getInfoUserBook(jsonObject)
             gotoBookFragment()
         }
@@ -146,7 +146,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onBackPressed() {
         if (currentFragment == Constants.FRAGMENT_BOOK) {
             currentFragment = Constants.FRAGMENT_MAP
-            mainViewModel.isShowMapLayout.set(true)
             gotoMapFragment()
             return
         }
@@ -241,7 +240,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.addToBackStack(null)
         transaction.add(R.id.fragmentBook, fragmentBook as BookFragment).commit()
-        mainViewModel.isShowMapLayout.set(false)
     }
 
     private fun getInfoUserBook(jsonObject: JSONObject) {
@@ -271,6 +269,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun handleEventAgreeBook() {
         mainViewModel.isShowingLayoutBottom.set(true)
+        gotoGoingFragment()
         drawShortestWayToUser()
     }
 
@@ -282,7 +281,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 supportFragmentManager.beginTransaction().remove(fragment).commit()
             }
         }
-        mainViewModel.isShowMapLayout.set(true)
+    }
+
+    private fun gotoGoingFragment() {
+        fragmentBook = GoingFragment()
+        currentFragment = Constants.FRAGMENT_GOING
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        transaction.add(R.id.fragmentBook, fragmentBook as GoingFragment).commit()
     }
 
     private fun addMarkerUser(latitude: Double, longitude: Double) {

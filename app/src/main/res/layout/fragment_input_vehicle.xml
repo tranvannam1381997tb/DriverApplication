@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.driverapplication.viewmodel.SignUpViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:text="@string/description_input_vehicle"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_description"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/description">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_type_driver"
+                android:textColor="@color/color_child_info_driver"
+                android:textSize="@dimen/text_size_name" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioBike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{viewModel.isCheckGrabBike()}"
+                    android:onClick="@{() -> viewModel.checkRadioMale()}"
+                    android:text="@string/grab_bike"
+                    android:textSize="@dimen/text_size_name" />
+
+                <RadioButton
+                    android:id="@+id/radioCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:checked="@{!viewModel.isCheckGrabBike()}"
+                    android:onClick="@{() -> viewModel.checkRadioFemale()}"
+                    android:text="@string/grab_car"
+                    android:textSize="@dimen/text_size_name" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/input_type_vehicle"
+                android:textColor="@color/color_child_info_driver"
+                android:textSize="@dimen/text_size_name" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtTypeVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_text_button_setting_activity"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:hint="@string/hint_input_type_vehicle"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:singleLine="true"
+                android:text="Honda Wawe"
+                android:textSize="@dimen/text_size_name" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/input_license_plate_number"
+                android:textColor="@color/color_child_info_driver"
+                android:textSize="@dimen/text_size_name" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtLicensePlateNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_text_button_setting_activity"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:hint="@string/hint_input_age"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:singleLine="true"
+                android:text="17B1-16315"
+                android:textSize="@dimen/text_size_name" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnNextInputVehicle"
+            style="@style/Widget.Button.Simple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/button_style"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

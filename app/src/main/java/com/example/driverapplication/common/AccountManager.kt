@@ -83,6 +83,11 @@ enum class SexValue(val rawValue: String) {
     FEMALE("Nữ")
 }
 
+enum class TypeDriverValue(val rawValue: String) {
+    GRAB_BIKE("GrabBike"),
+    GRAB_CAR("GrabCar")
+}
+
 enum class StatusDriver(val rawValue: Int) {
     OFF(-1),
     ON(0),

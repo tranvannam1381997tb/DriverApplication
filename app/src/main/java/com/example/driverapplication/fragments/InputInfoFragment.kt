@@ -49,38 +49,10 @@ class InputInfoFragment : Fragment() {
                 inputInfoViewModel.name = binding.edtName.text.toString()
                 inputInfoViewModel.age = binding.edtAge.text.toString().toInt()
                 inputInfoViewModel.sex = if (inputInfoViewModel.isCheckMale.get()!!) SexValue.MALE.rawValue else SexValue.FEMALE.rawValue
-                HttpConnection.getInstance().startSignUp(getJSONInfo()) { isSuccess, dataResponse ->
-                    if (isSuccess) {
-                        val jsonObject = JSONObject(dataResponse)
-                        val driverId = CommonUtils.getStringFromJsonObject(jsonObject, DriverInfoKey.KeyDriverId.rawValue)
-                        val accountManager = AccountManager.getInstance()
-                        accountManager.saveDriverId(driverId)
-                        startMainActivity()
-                    } else {
-                        showToastError(dataResponse)
-                    }
-                }
+
+                inputInfoViewModel.onClickSignUpScreenListener?.clickBtnNextInputInfo()
             }
         })
-    }
-
-    private fun getJSONInfo(): JSONObject {
-        val jsonInfo = JSONObject()
-        if (inputInfoViewModel.phoneNumber!!.startsWith("0")) {
-            val phoneNumber = "+84" + inputInfoViewModel.phoneNumber!!.substring(1, inputInfoViewModel.phoneNumber!!.length)
-            jsonInfo.put(DriverInfoKey.KeyPhoneNumber.rawValue, phoneNumber)
-        } else {
-            jsonInfo.put(DriverInfoKey.KeyPhoneNumber.rawValue, inputInfoViewModel.phoneNumber)
-        }
-        jsonInfo.put(DriverInfoKey.KeyPassword.rawValue, inputInfoViewModel.password)
-        jsonInfo.put(DriverInfoKey.KeyName.rawValue, inputInfoViewModel.name)
-        jsonInfo.put(DriverInfoKey.KeyAge.rawValue, inputInfoViewModel.age)
-        if (inputInfoViewModel.sex == SexValue.MALE.rawValue) {
-            jsonInfo.put(DriverInfoKey.KeySex.rawValue, 0)
-        } else {
-            jsonInfo.put(DriverInfoKey.KeySex.rawValue, 1)
-        }
-        return jsonInfo
     }
 
     private fun validateInfo(): Boolean {
@@ -97,10 +69,5 @@ class InputInfoFragment : Fragment() {
 
     private fun showToastError(error: String) {
         Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-    }
-
-    private fun startMainActivity() {
-        val intent = Intent(context, MainActivity::class.java)
-        context?.startActivity(intent)
     }
 }
