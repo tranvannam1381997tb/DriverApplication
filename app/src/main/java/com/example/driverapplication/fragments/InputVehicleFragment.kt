@@ -15,6 +15,8 @@ import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentInputVehicleBinding
 import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.model.SexValue
+import com.example.driverapplication.model.TypeDriverValue
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.SignUpViewModel
 import org.json.JSONObject

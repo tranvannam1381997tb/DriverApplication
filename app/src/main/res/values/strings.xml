@@ -44,6 +44,8 @@
 	<string name="error_phone_number_invalid">Số điện thoại không hợp lệ</string>
 	<string name="error_password_invalid">Mật khẩu không hợp lệ</string>
 	<string name="connect_server_error">Lỗi kết nối máy chủ</string>
+	<string name="no_account">Tài khoản không đúng</string>
+
 
 	// Input vehicle
 	<string name="description_input_vehicle">Nhập thông tin xe</string>

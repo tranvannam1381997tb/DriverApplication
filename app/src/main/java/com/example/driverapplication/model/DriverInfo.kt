@@ -39,3 +39,22 @@ enum class DriverInfoKey(val rawValue: String) {
     KeyTypeVehicle("typeVehicle"),
     KeyLicensePlateNumber("licensePlateNumber")
 }
+
+enum class DriverStatus(val rawValue: Int) {
+    StatusOff(-1),
+    StatusOn(0),
+    StatusArrivingOrigin(1),
+    StatusGoing(2),
+    StatusArrivingDestination(3)
+}
+
+
+enum class SexValue(val rawValue: String) {
+    MALE("Nam"),
+    FEMALE("Nữ")
+}
+
+enum class TypeDriverValue(val rawValue: String) {
+    GRAB_BIKE("GrabBike"),
+    GRAB_CAR("GrabCar")
+}

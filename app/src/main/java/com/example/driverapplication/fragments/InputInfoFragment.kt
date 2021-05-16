@@ -10,14 +10,9 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
-import com.example.driverapplication.activities.MainActivity
-import com.example.driverapplication.common.AccountManager
-import com.example.driverapplication.common.CommonUtils
-import com.example.driverapplication.common.SexValue
 import com.example.driverapplication.common.setOnSingleClickListener
-import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentInputInfoBinding
-import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.model.SexValue
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.SignUpViewModel
 import org.json.JSONObject

@@ -73,9 +73,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
 
-        // TODO debug code
-        accountManager.saveDriverId("idDriver_1")
-
         initDataMap()
         initView()
         setupEvent()
@@ -185,6 +182,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 map?.moveCamera(
                                     CameraUpdateFactory.newLatLng(currentLocation)
                                 )
+                                Log.d("NamTV", "update location LocationCallback")
                             }
                         }
                     }
@@ -200,6 +198,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             )
                         )
                         fusedLocationProviderClient?.requestLocationUpdates(locationRequest, locationCallback, null)
+                        Log.d("NamTV", "update location fusedLocationProviderClient")
                     }
                 }
             }

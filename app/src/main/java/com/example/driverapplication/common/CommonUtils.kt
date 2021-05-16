@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.driverapplication.DriverApplication
+import com.example.driverapplication.model.SexValue
 import com.google.firebase.database.DataSnapshot
 import org.json.JSONArray
 import org.json.JSONObject

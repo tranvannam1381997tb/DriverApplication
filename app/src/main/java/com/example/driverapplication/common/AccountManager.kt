@@ -77,20 +77,3 @@ class AccountManager private constructor() {
         return currentLocation ?: Constants.DEFAULT_LOCATION
     }
 }
-
-enum class SexValue(val rawValue: String) {
-    MALE("Nam"),
-    FEMALE("Nữ")
-}
-
-enum class TypeDriverValue(val rawValue: String) {
-    GRAB_BIKE("GrabBike"),
-    GRAB_CAR("GrabCar")
-}
-
-enum class StatusDriver(val rawValue: Int) {
-    OFF(-1),
-    ON(0),
-    ARRIVING(1),
-    GOING(2)
-}

@@ -24,13 +24,15 @@ class HttpConnection private constructor() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
             callback.invoke(true, it.toString())
         }, Response.ErrorListener {
-            if (it.networkResponse != null) {
-                val statusCode = it.networkResponse.statusCode
-                if (statusCode == 400) {
-                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
-                    val error = dataError.getString("error")
-                    callback.invoke(false, error)
+            try {
+                if (it.networkResponse != null) {
+                    val statusCode = it.networkResponse.statusCode
+                    if (statusCode == 400) {
+                        callback.invoke(false, DriverApplication.getAppContext().getString(R.string.no_account))
+                    }
                 }
+            } catch (e: Exception) {
+                Log.d("NamTV", "HttpConnection::startLogin::exception")
             }
 
             callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
@@ -88,7 +90,7 @@ class HttpConnection private constructor() {
         }, Response.ErrorListener {
             if (it.networkResponse != null) {
                 val statusCode = it.networkResponse.statusCode
-                if (statusCode == 400) {
+                if (statusCode == 400 && it.networkResponse.data != null) {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
                     val error = dataError.getString("error")
                     callback.invoke(false, error)
@@ -117,7 +119,7 @@ class HttpConnection private constructor() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
             callback.invoke(true, it.toString())
         }, Response.ErrorListener {
-            if (it.networkResponse != null) {
+            if (it.networkResponse != null && it.networkResponse.data.isEmpty()) {
                 val statusCode = it.networkResponse.statusCode
                 if (statusCode == 400) {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
@@ -148,7 +150,7 @@ class HttpConnection private constructor() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
             callback.invoke(true, it.toString())
         }, Response.ErrorListener {
-            if (it.networkResponse != null) {
+            if (it.networkResponse != null && it.networkResponse.data.isEmpty()) {
                 val statusCode = it.networkResponse.statusCode
                 if (statusCode == 400) {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))

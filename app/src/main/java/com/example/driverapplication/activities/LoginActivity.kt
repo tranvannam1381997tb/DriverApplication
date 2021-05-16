@@ -11,6 +11,7 @@ import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityLoginBinding
+import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.LoginViewModel
@@ -71,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // TODO debug code
-        binding.edtPhoneNumber.setText("0976356351")
+        binding.edtPhoneNumber.setText("0976356355")
         binding.edtPassword.setText("123456")
     }
 
@@ -79,7 +80,8 @@ class LoginActivity : AppCompatActivity() {
         HttpConnection.getInstance().startLogin(getJSONLogin()) { isSuccess, dataResponse ->
             if (isSuccess) {
                 val jsonObject = JSONObject(dataResponse)
-                val userId = CommonUtils.getStringFromJsonObject(jsonObject, DriverInfoKey.KeyDriverId.rawValue)
+                val jsonDriver = CommonUtils.getJsonObjectFromJsonObject(jsonObject, FirebaseConstants.KEY_DRIVER)
+                val userId = CommonUtils.getStringFromJsonObject(jsonDriver, DriverInfoKey.KeyDriverId.rawValue)
                 val accountManager = AccountManager.getInstance()
                 accountManager.saveDriverId(userId)
                 startMainActivity()

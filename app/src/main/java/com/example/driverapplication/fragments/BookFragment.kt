@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
-import com.example.driverapplication.common.StatusDriver
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.model.DriverStatus
 import com.example.driverapplication.shared_preferences.AppPreferences
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
@@ -67,7 +66,7 @@ class BookFragment : Fragment() {
 
     private fun getJSONArriving(): JSONObject {
         val jsonBody = JSONObject()
-        jsonBody.put(DriverInfoKey.KeyStatus.rawValue, StatusDriver.ARRIVING.rawValue)
+        jsonBody.put(DriverInfoKey.KeyStatus.rawValue, DriverStatus.StatusArrivingOrigin.rawValue)
         return jsonBody
     }
 }

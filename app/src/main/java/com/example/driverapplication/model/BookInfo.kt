@@ -1,9 +1,7 @@
 package com.example.driverapplication.model
 
 import android.os.Parcelable
-import com.example.driverapplication.common.SexValue
 import kotlinx.android.parcel.Parcelize
-import kotlin.properties.Delegates
 
 @Parcelize
 data class BookInfo(
