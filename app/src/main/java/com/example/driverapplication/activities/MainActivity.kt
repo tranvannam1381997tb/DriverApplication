@@ -20,6 +20,7 @@ import com.example.driverapplication.common.Constants
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.firebase.FirebaseManager
+import com.example.driverapplication.fragments.BillFragment
 import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.fragments.GoingFragment
 import com.example.driverapplication.googlemaps.MapsConnection
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
     private var fragmentBook : Fragment? = null
-    var currentFragment = Constants.FRAGMENT_MAP
+    private var currentFragment = Constants.FRAGMENT_MAP
 
     private lateinit var transaction: FragmentTransaction
 
@@ -102,7 +103,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (!mainViewModel.isShowingLayoutBottom.get()!!) {
                     Log.d("NamTV", "notify = ${jsonData.getString(FirebaseConstants.KEY_USER_ID)}")
                     getInfoUserBook(jsonData)
-                    mainViewModel.isShowingLayoutBook.set(true)
                     CommonUtils.vibrateDevice()
                     gotoBookFragment()
                 }
@@ -244,6 +244,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun gotoBookFragment() {
         fragmentBook = BookFragment()
         currentFragment = Constants.FRAGMENT_BOOK
+        mainViewModel.isShowingLayoutBook.set(true)
+        mainViewModel.isShowingLayoutBottom.set(false)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(
@@ -279,6 +281,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun drawShortestWayToDestination() {
+//        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo, longitude) {
+//            addMarkerUser(latitude, longitude)
+//        }
+    }
+
     fun handleEventAgreeBook() {
         mainViewModel.isShowingLayoutBook.set(false)
         mainViewModel.isShowingLayoutBottom.set(true)
@@ -289,6 +297,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     fun handleEventArrivedOrigin() {
         mainViewModel.isShowingLayoutBottom.set(true)
         gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)
+        drawShortestWayToDestination()
     }
 
     fun handleEventGoing() {
@@ -302,7 +311,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun handleEventBill() {
-
+        gotoFragmentBill()
     }
 
     fun gotoMapFragment() {
@@ -336,7 +345,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun gotoFragmentBill() {
+        fragmentBook = BillFragment()
+        currentFragment = Constants.FRAGMENT_BILL
+        mainViewModel.isShowingLayoutBottom.set(false)
+        mainViewModel.isShowingLayoutBook.set(true)
 
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_top,
+            R.anim.pop_in_bottom,
+            R.anim.pop_out_top
+        )
+        transaction.replace(R.id.fragmentBook, fragmentBook as BillFragment).commit()
     }
 
     private fun addMarkerUser(latitude: Double, longitude: Double) {

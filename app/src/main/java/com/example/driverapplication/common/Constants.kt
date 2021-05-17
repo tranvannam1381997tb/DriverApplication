@@ -13,6 +13,7 @@ class Constants {
         const val FRAGMENT_MAP = 0
         const val FRAGMENT_BOOK = 1
         const val FRAGMENT_GOING = 2
+        const val FRAGMENT_BILL = 3
 
         val DEFAULT_LOCATION = LatLng(-33.8523341, 151.2106085)
     }

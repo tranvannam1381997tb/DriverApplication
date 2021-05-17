@@ -80,4 +80,8 @@
 	<string name="description_final_book">Kết thúc chuyến đi</string>
 	<string name="bill">Tính tiền</string>
 
+	// Bill Fragment
+	<string name="description_bill_fragment">Thông tin chuyến xe</string>
+	<string name="received_money">Bạn đã nhận tiền</string>
+
 </resources>
