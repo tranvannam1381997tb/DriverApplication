@@ -25,6 +25,10 @@ class AppPreferences private constructor(context: Context) : BasePreference() {
         dataBookInfo.put(FirebaseConstants.KEY_PHONE_NUMBER, bookInfo.phoneNumber)
         dataBookInfo.put(FirebaseConstants.KEY_START_ADDRESS, bookInfo.startAddress)
         dataBookInfo.put(FirebaseConstants.KEY_END_ADDRESS, bookInfo.endAddress)
+        dataBookInfo.put(FirebaseConstants.KEY_LAT_START, bookInfo.latStart)
+        dataBookInfo.put(FirebaseConstants.KEY_LNG_START, bookInfo.lngStart)
+        dataBookInfo.put(FirebaseConstants.KEY_LAT_END, bookInfo.latEnd)
+        dataBookInfo.put(FirebaseConstants.KEY_LNG_END, bookInfo.lngEnd)
         dataBookInfo.put(FirebaseConstants.KEY_PRICE, bookInfo.price)
         dataBookInfo.put(FirebaseConstants.KEY_DISTANCE, bookInfo.distance)
 
@@ -44,6 +48,10 @@ class AppPreferences private constructor(context: Context) : BasePreference() {
             phoneNumber = CommonUtils.getStringFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_PHONE_NUMBER),
             startAddress = CommonUtils.getStringFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_START_ADDRESS),
             endAddress = CommonUtils.getStringFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_END_ADDRESS),
+            latStart = CommonUtils.getDoubleFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_LAT_START),
+            lngStart = CommonUtils.getDoubleFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_LNG_START),
+            latEnd = CommonUtils.getDoubleFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_LAT_END),
+            lngEnd = CommonUtils.getDoubleFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_LNG_END),
             price = CommonUtils.getStringFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_PRICE),
             distance = CommonUtils.getStringFromJsonObject(bookInfoPreferences!!, FirebaseConstants.KEY_DISTANCE)
         )

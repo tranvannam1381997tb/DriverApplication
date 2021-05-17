@@ -17,6 +17,7 @@ import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.CommonUtils
 import com.example.driverapplication.common.Constants
+import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.firebase.FirebaseManager
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONObject
+import java.sql.DriverManager
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -182,6 +184,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 map?.moveCamera(
                                     CameraUpdateFactory.newLatLng(currentLocation)
                                 )
+
+                                HttpConnection.getInstance().updateStatusDriver()
                                 Log.d("NamTV", "update location LocationCallback")
                             }
                         }
@@ -267,6 +271,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             phoneNumber = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_PHONE_NUMBER),
             startAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_START_ADDRESS),
             endAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_END_ADDRESS),
+            latStart = CommonUtils.getDoubleFromJsonObject(jsonObject, FirebaseConstants.KEY_LAT_START),
+            lngStart = CommonUtils.getDoubleFromJsonObject(jsonObject, FirebaseConstants.KEY_LNG_START),
+            latEnd = CommonUtils.getDoubleFromJsonObject(jsonObject, FirebaseConstants.KEY_LAT_END),
+            lngEnd = CommonUtils.getDoubleFromJsonObject(jsonObject, FirebaseConstants.KEY_LNG_END),
             price = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_PRICE),
             distance = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_DISTANCE)
         )
@@ -274,10 +282,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun drawShortestWayToUser() {
-        FirebaseManager.getInstance().getLocationUser(mainViewModel.bookInfo!!.userId) { latitude, longitude ->
-            MapsConnection.getInstance().drawShortestWay(map!!, latitude, longitude) {
-                addMarkerUser(latitude, longitude)
-            }
+        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart) {
+            addMarkerUser(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
         }
     }
 

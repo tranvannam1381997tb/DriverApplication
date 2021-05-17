@@ -13,6 +13,10 @@ data class BookInfo(
     var phoneNumber: String,
     var startAddress: String,
     var endAddress: String,
+    var latStart: Double,
+    var lngStart: Double,
+    var latEnd: Double,
+    var lngEnd: Double,
     var price: String,
     var distance: String
 

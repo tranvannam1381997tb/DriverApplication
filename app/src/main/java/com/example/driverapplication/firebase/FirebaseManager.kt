@@ -51,22 +51,4 @@ class FirebaseManager private constructor() {
             databaseDrivers.child(idDriver).child(FirebaseConstants.KEY_TOKEN_ID).setValue(tokenId)
         }
     }
-
-    fun getLocationUser(userId: String, callback:(Double, Double) -> Unit) {
-         databaseUsers.child(userId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("NamTV", "listener Location User")
-                val latitude = FirebaseUtils.getDoubleFromDataSnapshot(snapshot, FirebaseConstants.KEY_LATITUDE)
-                val longitude = FirebaseUtils.getDoubleFromDataSnapshot(snapshot, FirebaseConstants.KEY_LONGITUDE)
-
-                callback.invoke(latitude, longitude)
-                databaseUsers.child(userId).removeEventListener(this)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-    }
-
 }
