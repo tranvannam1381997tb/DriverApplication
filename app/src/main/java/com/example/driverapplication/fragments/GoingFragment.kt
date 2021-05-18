@@ -12,8 +12,10 @@ import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.databinding.FragmentGoingBinding
 import com.example.driverapplication.firebase.FirebaseConnection
+import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
+import com.google.android.gms.maps.model.LatLng
 
 class GoingFragment : Fragment() {
     private val goingViewModel: MainViewModel
@@ -86,13 +88,11 @@ class GoingFragment : Fragment() {
     }
 
     private fun handleGoingPickUp() {
-        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
+        MapsConnection.getInstance().getShortestWay(goingViewModel.bookInfo!!.latStart, goingViewModel.bookInfo!!.lngStart, goingViewModel.bookInfo!!.latEnd, goingViewModel.bookInfo!!.lngEnd) { isSuccess, time ->
             if (isSuccess) {
                 if (activity is MainActivity) {
                     (activity as MainActivity).handleEventArrivedOrigin()
                 }
-            } else {
-                // TODO
             }
         }
     }

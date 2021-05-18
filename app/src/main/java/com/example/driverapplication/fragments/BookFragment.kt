@@ -9,15 +9,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
+import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
+import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.model.DriverStatus
 import com.example.driverapplication.shared_preferences.AppPreferences
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
+import com.google.android.gms.maps.model.LatLng
 import org.json.JSONObject
 
 class BookFragment : Fragment() {
@@ -38,16 +41,16 @@ class BookFragment : Fragment() {
 
     private fun setupEvent() {
         binding.btnAgree.setOnSingleClickListener(View.OnClickListener {
-            FirebaseConnection.getInstance().pushNotifyAgreeBook(bookViewModel.bookInfo!!.tokenId) { isSuccess ->
+            val currentLocation = AccountManager.getInstance().getLocationDriver()
+            MapsConnection.getInstance().getShortestWay(currentLocation.latitude, currentLocation.longitude, bookViewModel.bookInfo!!.latStart, bookViewModel.bookInfo!!.lngStart) { isSuccess, time ->
                 if (isSuccess) {
                     AppPreferences.getInstance(requireActivity()).saveBookInfoToPreferences(bookViewModel.bookInfo!!)
                     if (activity is MainActivity) {
                         (activity as MainActivity).handleEventAgreeBook()
                     }
-                } else {
-                    // TODO
                 }
             }
+
             HttpConnection.getInstance().startArriving(getJSONArriving()) { isSuccess, dataResponse->
                 if (isSuccess) {
                     // TODO

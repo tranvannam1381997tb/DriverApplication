@@ -116,6 +116,7 @@ class FirebaseConnection private constructor() {
     fun pushNotifyArrivedOrigin(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
         val notification = createBodyRequestArrivedOrigin(userTokenId)
+        Log.d("NamTV", "pushNotifyArrivedOrigin: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")
@@ -160,6 +161,7 @@ class FirebaseConnection private constructor() {
     fun pushNotifyGoing(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
         val notification = createBodyRequestGoing(userTokenId)
+        Log.d("NamTV", "pushNotifyGoing: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")
@@ -204,6 +206,7 @@ class FirebaseConnection private constructor() {
     fun pushNotifyArrivedDestination(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
         val notification = createBodyRequestArrivedDestination(userTokenId)
+        Log.d("NamTV", "pushNotifyArrivedDestination: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")
@@ -248,6 +251,7 @@ class FirebaseConnection private constructor() {
     fun pushNotifyBill(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
         val notification = createBodyRequestBill(userTokenId)
+        Log.d("NamTV", "pushNotifyBill: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")

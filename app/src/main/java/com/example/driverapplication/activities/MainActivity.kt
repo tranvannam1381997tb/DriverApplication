@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,8 +20,8 @@ import com.example.driverapplication.common.CommonUtils
 import com.example.driverapplication.common.Constants
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.ActivityMainBinding
+import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.firebase.FirebaseConstants
-import com.example.driverapplication.firebase.FirebaseManager
 import com.example.driverapplication.fragments.BillFragment
 import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.fragments.GoingFragment
@@ -36,12 +37,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import org.json.JSONObject
-import java.sql.DriverManager
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -70,6 +67,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var locationCallback: LocationCallback? = null
 
     private var locationPermissionGranted = false
+
+    private var markerOrigin: Marker? = null
+    private var markerDestination: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -281,29 +281,56 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel.bookInfo = bookInfo
     }
 
+    private fun pushNotifyAgreeBook() {
+
+    }
+
     private fun drawShortestWayToUser() {
-        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart) {
-            addMarkerUser(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
+        map!!.clear()
+        val polyLines = MapsConnection.getInstance().polylines
+        for (i in 0 until polyLines.size) {
+            map!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
         }
+        val latLngStart = LatLng(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
+        val currentLocation = AccountManager.getInstance().getLocationDriver()
+        addMarkerDestination(currentLocation, latLngStart)
     }
 
     private fun drawShortestWayToDestination() {
-//        MapsConnection.getInstance().drawShortestWay(map!!, mainViewModel.bookInfo, longitude) {
-//            addMarkerUser(latitude, longitude)
-//        }
+        map!!.clear()
+        val polyLines = MapsConnection.getInstance().polylines
+        for (i in 0 until polyLines.size) {
+            map!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
+        }
+        val latLngStart = LatLng(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
+        val latLngEnd = LatLng(mainViewModel.bookInfo!!.latEnd, mainViewModel.bookInfo!!.lngEnd)
+        addMarkerDestination(latLngStart, latLngEnd)
     }
 
     fun handleEventAgreeBook() {
-        mainViewModel.isShowingLayoutBook.set(false)
-        mainViewModel.isShowingLayoutBottom.set(true)
-        gotoGoingFragment(GoingFragment.STATUS_GOING_PICK_UP)
-        drawShortestWayToUser()
+        FirebaseConnection.getInstance().pushNotifyAgreeBook(mainViewModel.bookInfo!!.tokenId) { isSuccess ->
+            if (isSuccess) {
+                drawShortestWayToUser()
+                mainViewModel.isShowingLayoutBook.set(false)
+                mainViewModel.isShowingLayoutBottom.set(true)
+                gotoGoingFragment(GoingFragment.STATUS_GOING_PICK_UP)
+            } else {
+                // TODO
+            }
+        }
+
     }
 
     fun handleEventArrivedOrigin() {
-        mainViewModel.isShowingLayoutBottom.set(true)
-        gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)
-        drawShortestWayToDestination()
+        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(mainViewModel.bookInfo!!.tokenId) { isSuccess ->
+            if (isSuccess) {
+                mainViewModel.isShowingLayoutBottom.set(true)
+                gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)
+                drawShortestWayToDestination()
+            } else {
+                // TODO
+            }
+        }
     }
 
     fun handleEventGoing() {
@@ -314,6 +341,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     fun handleEventArrivedDestination() {
         mainViewModel.isShowingLayoutBottom.set(true)
         gotoGoingFragment(GoingFragment.STATUS_ARRIVED_DESTINATION)
+        map!!.clear()
     }
 
     fun handleEventBill() {
@@ -366,12 +394,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         transaction.replace(R.id.fragmentBook, fragmentBook as BillFragment).commit()
     }
 
-    private fun addMarkerUser(latitude: Double, longitude: Double) {
-        val markerOption = MarkerOptions().apply {
-            position(LatLng(latitude, longitude))
+    private fun addMarkerDestination(latLngOrigin: LatLng, latLngDestination: LatLng) {
+        val markerOptionDestination = MarkerOptions().apply {
+            position(latLngDestination)
             icon(bitmapFromVector(R.drawable.person))
         }
-        map!!.addMarker(markerOption)
+        val markerOptionOrigin = MarkerOptions().apply {
+            position(latLngOrigin)
+        }
+        markerOrigin = map!!.addMarker(markerOptionOrigin)
+        markerDestination = map!!.addMarker(markerOptionDestination)
     }
 
     private fun bitmapFromVector(vectorResId: Int): BitmapDescriptor? {
