@@ -35,6 +35,9 @@ class FirebaseConstants {
         const val KEY_DRIVER_ARRIVED_DESTINATION = "driverArrivedDestination"
         const val KEY_DRIVER_BILL = "driverBill"
 
+        const val KEY_TIME_ARRIVED_ORIGIN = "timeArrivedOrigin"
+        const val KEY_TIME_ARRIVED_DESTINATION = "timeArrivedDestination"
+
         const val KEY_TO = "to"
         const val KEY_DATA = "data"
         const val KEY_SUCCESS = "success"

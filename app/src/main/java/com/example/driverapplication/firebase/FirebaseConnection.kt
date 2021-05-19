@@ -25,9 +25,9 @@ class FirebaseConnection private constructor() {
         }
     }
 
-    fun pushNotifyAgreeBook(userTokenId: String, callback: (Boolean) -> Unit) {
+    fun pushNotifyAgreeBook(userTokenId: String, timeArrivedOrigin: Int, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
-        val notification = createBodyRequestAgreeBook(userTokenId)
+        val notification = createBodyRequestAgreeBook(userTokenId, timeArrivedOrigin)
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
                 Log.d("NamTV", "JsonObjectRequest Response.Listener + $it")
@@ -52,13 +52,14 @@ class FirebaseConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    private fun createBodyRequestAgreeBook(userTokenId: String): JSONObject {
+    private fun createBodyRequestAgreeBook(userTokenId: String, timeArrivedOrigin: Int): JSONObject {
         val notification = JSONObject()
         val notificationBody = JSONObject()
         val notificationData = JSONObject()
 
         try {
             notificationData.put(FirebaseConstants.KEY_DRIVER_GOING_BOOK, true)
+            notificationData.put(FirebaseConstants.KEY_TIME_ARRIVED_ORIGIN, timeArrivedOrigin)
             notificationBody.put(FirebaseConstants.KEY_DRIVER_RESPONSE, notificationData)
             notification.put(FirebaseConstants.KEY_TO, userTokenId)
             notification.put(FirebaseConstants.KEY_DATA, notificationBody)
@@ -113,9 +114,9 @@ class FirebaseConnection private constructor() {
         }
     }
 
-    fun pushNotifyArrivedOrigin(userTokenId: String, callback: (Boolean) -> Unit) {
+    fun pushNotifyArrivedOrigin(userTokenId: String,timeArrivedDestination: Int, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
-        val notification = createBodyRequestArrivedOrigin(userTokenId)
+        val notification = createBodyRequestArrivedOrigin(userTokenId, timeArrivedDestination)
         Log.d("NamTV", "pushNotifyArrivedOrigin: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
@@ -141,13 +142,14 @@ class FirebaseConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    private fun createBodyRequestArrivedOrigin(userTokenId: String): JSONObject {
+    private fun createBodyRequestArrivedOrigin(userTokenId: String, timeArrivedDestination: Int): JSONObject {
         val notification = JSONObject()
         val notificationBody = JSONObject()
         val notificationData = JSONObject()
 
         try {
             notificationData.put(FirebaseConstants.KEY_DRIVER_ARRIVED_ORIGIN, true)
+            notificationData.put(FirebaseConstants.KEY_TIME_ARRIVED_DESTINATION, timeArrivedDestination)
             notificationBody.put(FirebaseConstants.KEY_DRIVER_RESPONSE, notificationData)
             notification.put(FirebaseConstants.KEY_TO, userTokenId)
             notification.put(FirebaseConstants.KEY_DATA, notificationBody)

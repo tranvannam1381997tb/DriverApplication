@@ -307,8 +307,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         addMarkerDestination(latLngStart, latLngEnd)
     }
 
-    fun handleEventAgreeBook() {
-        FirebaseConnection.getInstance().pushNotifyAgreeBook(mainViewModel.bookInfo!!.tokenId) { isSuccess ->
+    fun handleEventAgreeBook(timeArrivedOrigin: Int) {
+        FirebaseConnection.getInstance().pushNotifyAgreeBook(mainViewModel.bookInfo!!.tokenId, timeArrivedOrigin) { isSuccess ->
             if (isSuccess) {
                 drawShortestWayToUser()
                 mainViewModel.isShowingLayoutBook.set(false)
@@ -321,8 +321,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun handleEventArrivedOrigin() {
-        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(mainViewModel.bookInfo!!.tokenId) { isSuccess ->
+    fun handleEventArrivedOrigin(timeArrivedDestination: Int) {
+        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(mainViewModel.bookInfo!!.tokenId, timeArrivedDestination) { isSuccess ->
             if (isSuccess) {
                 mainViewModel.isShowingLayoutBottom.set(true)
                 gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)

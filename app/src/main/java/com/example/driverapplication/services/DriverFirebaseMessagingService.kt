@@ -20,7 +20,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import org.json.JSONObject
 
 class DriverFirebaseMessagingService : FirebaseMessagingService() {
-    private val notificationChannelId = "Driver Application tét"
     override fun handleIntent(intent: Intent?) {
         val action = intent?.action
         if ("com.google.android.c2dm.intent.RECEIVE" == action || "com.google.firebase.messaging.RECEIVE_DIRECT_BOOT" == action) {

@@ -123,7 +123,7 @@ class CommonUtils {
 
         fun vibrateDevice() {
             val vibrator = DriverApplication.getAppContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 }

@@ -42,11 +42,11 @@ class BookFragment : Fragment() {
     private fun setupEvent() {
         binding.btnAgree.setOnSingleClickListener(View.OnClickListener {
             val currentLocation = AccountManager.getInstance().getLocationDriver()
-            MapsConnection.getInstance().getShortestWay(currentLocation.latitude, currentLocation.longitude, bookViewModel.bookInfo!!.latStart, bookViewModel.bookInfo!!.lngStart) { isSuccess, time ->
+            MapsConnection.getInstance().getShortestWay(currentLocation.latitude, currentLocation.longitude, bookViewModel.bookInfo!!.latStart, bookViewModel.bookInfo!!.lngStart) { isSuccess, timeArrivedOrigin ->
                 if (isSuccess) {
                     AppPreferences.getInstance(requireActivity()).saveBookInfoToPreferences(bookViewModel.bookInfo!!)
                     if (activity is MainActivity) {
-                        (activity as MainActivity).handleEventAgreeBook()
+                        (activity as MainActivity).handleEventAgreeBook(timeArrivedOrigin)
                     }
                 }
             }

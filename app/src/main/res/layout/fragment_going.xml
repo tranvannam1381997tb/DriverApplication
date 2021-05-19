@@ -33,14 +33,13 @@
 				android:textStyle="bold"
 				tools:text="@string/description_arrived_origin"/>
 
-			<LinearLayout
+			<androidx.constraintlayout.widget.ConstraintLayout
 				android:id="@+id/layout_info_user"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center"
 				android:layout_marginTop="20dp"
-				android:gravity="start"
-				android:orientation="horizontal">
+				android:gravity="start">
 
 				<TextView
 					android:id="@+id/name"
@@ -51,16 +50,23 @@
 					android:textSize="@dimen/text_size_name"
 					android:textStyle="bold"
 					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
 					tools:text="Tran Van Nam" />
 
 				<ImageView
+					android:id="@+id/dot1"
 					android:layout_width="10dp"
 					android:layout_height="10dp"
 					android:layout_gravity="center"
 					android:layout_marginStart="@dimen/margin_start_with_info"
-					android:src="@drawable/black_circle" />
+					android:src="@drawable/black_circle"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toEndOf="@id/name" />
 
 				<TextView
+					android:id="@+id/sex"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="@dimen/margin_start_with_info"
@@ -69,14 +75,20 @@
 					android:textSize="@dimen/text_size_name"
 					android:textStyle="bold"
 					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toEndOf="@id/dot1"
 					tools:text="Nam" />
 
 				<ImageView
+					android:id="@+id/dot2"
 					android:layout_width="10dp"
 					android:layout_height="10dp"
 					android:layout_gravity="center"
 					android:layout_marginStart="@dimen/margin_start_with_info"
-					android:src="@drawable/black_circle" />
+					android:src="@drawable/black_circle"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toEndOf="@id/sex"/>
 
 				<TextView
 					android:layout_width="wrap_content"
@@ -87,9 +99,20 @@
 					android:textSize="@dimen/text_size_name"
 					android:textStyle="bold"
 					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintStart_toEndOf="@id/dot2"
 					tools:text="24" />
 
-			</LinearLayout>
+				<ImageView
+					android:layout_width="30dp"
+					android:layout_height="30dp"
+					android:layout_gravity="center"
+					android:src="@drawable/phone_call"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
 
 			<LinearLayout
 				android:id="@+id/layout_start_address"
