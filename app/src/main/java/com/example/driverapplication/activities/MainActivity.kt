@@ -1,6 +1,8 @@
 package com.example.driverapplication.activities
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,6 +10,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -18,6 +21,7 @@ import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.CommonUtils
 import com.example.driverapplication.common.Constants
+import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConnection
@@ -97,7 +101,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-
     private fun setupEvent() {
         DriverFirebaseMessagingService.bookListener = object : BookListener {
 
@@ -109,8 +112,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     gotoBookFragment()
                 }
             }
-
         }
+
+        binding.imgLogout.setOnSingleClickListener(View.OnClickListener {
+            HttpConnection.getInstance().logout {
+                Log.d("NamTV", "logout = $it")
+                if (it) {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -435,6 +449,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // after generating our bitmap we are returning our bitmap.
         return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
     }
 
     companion object {

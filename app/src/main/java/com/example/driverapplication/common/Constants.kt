@@ -8,7 +8,8 @@ class Constants {
 
         const val DATE_FORMAT_FOR_FIREBASE = "dd/MM/yyyy"
         const val DATE_FORMAT_APP = "dd, MMM yyyy"
-        const val NOTIFICATION_CONTENT = "notification_content"
+
+        const val KEY_SUCCESS = "success"
 
         const val FRAGMENT_MAP = 0
         const val FRAGMENT_BOOK = 1

@@ -9,6 +9,7 @@ import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.Constants
+import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.DriverInfoKey
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -116,28 +117,6 @@ class HttpConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    fun updateStatusDriver() {
-        val url = String.format(URL_UPDATE_STATUS_DRIVER, HOST)
-        val jsonBody = JSONObject()
-        jsonBody.put(DriverInfoKey.KeyDriverId.rawValue, AccountManager.getInstance().getDriverId())
-        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
-        }, Response.ErrorListener {
-        }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val params = HashMap<String, String>()
-                params["Content-Type"] = "application/json; charset=utf-8"
-                params["Accept"] = "application/json"
-                return params
-            }
-        }
-        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
-            CONNECTION_TIMEOUT,
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
-        requestQueue.add(jsonObjectRequest)
-    }
-
     fun startGoing(jsonBody: JSONObject, callback:(Boolean, String) -> Unit) {
         val url = String.format(URL_START_GOING, HOST)
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
@@ -169,13 +148,65 @@ class HttpConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
+    fun updateStatusDriver() {
+        val url = String.format(URL_UPDATE_STATUS_DRIVER, HOST)
+        val jsonBody = JSONObject()
+        jsonBody.put(DriverInfoKey.KeyDriverId.rawValue, AccountManager.getInstance().getDriverId())
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            Log.d("NamTV", "updateStatusDriver $it + $jsonBody")
+        }, Response.ErrorListener {
+            Log.d("NamTV", "updateStatusDriver ErrorListener $it")
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            CONNECTION_TIMEOUT,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
+    fun logout(callback:(Boolean) -> Unit) {
+        val url = String.format(URL_LOGOUT, HOST)
+        val jsonBody = JSONObject()
+        jsonBody.put(DriverInfoKey.KeyDriverId.rawValue, AccountManager.getInstance().getDriverId())
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            Log.d("NamTV", "updateStatusDriver $it + $jsonBody")
+            callback.invoke(true)
+        }, Response.ErrorListener {
+            Log.d("NamTV", "updateStatusDriver ErrorListener $it")
+            callback.invoke(false)
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            CONNECTION_TIMEOUT,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
     companion object {
         private const val URL_LOGIN_FORMAT = "http://%s/api/driver/login"
         private const val URL_SIGN_UP = "http://%s/api/driver/create"
         private const val URL_START_ARRIVING = "http://%s/api/driver/arriving"
         private const val URL_START_GOING = "http://%s/api/driver/going"
         private const val URL_UPDATE_STATUS_DRIVER = "http://%s/api/driver/update-status"
-        private const val HOST = "192.168.1.215:3000"
+        private const val URL_LOGOUT = "http://%s/api/driver/logout"
+
+        private const val HOST = "192.168.0.102:3000"
         private const val CONNECTION_TIMEOUT = 30000
 
         private var instance: HttpConnection? = null
@@ -191,5 +222,3 @@ class HttpConnection private constructor() {
         }
     }
 }
-
-class CompletionHandler(var data: String?, var error: String?, var responseCode: Int?)
