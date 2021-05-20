@@ -335,8 +335,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun handleEventArrivedOrigin(timeArrivedDestination: Int) {
-        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(mainViewModel.bookInfo!!.tokenId, timeArrivedDestination) { isSuccess ->
+    fun handleEventArrivedOrigin(startAddress: String, timeArrivedDestination: Int) {
+        FirebaseConnection.getInstance().pushNotifyArrivedOrigin(mainViewModel.bookInfo!!.tokenId, startAddress, timeArrivedDestination) { isSuccess ->
             if (isSuccess) {
                 mainViewModel.isShowingLayoutBottom.set(true)
                 gotoGoingFragment(GoingFragment.STATUS_ARRIVED_ORIGIN)

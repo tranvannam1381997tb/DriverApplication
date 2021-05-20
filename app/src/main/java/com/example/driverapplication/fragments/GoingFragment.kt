@@ -91,7 +91,7 @@ class GoingFragment : Fragment() {
         MapsConnection.getInstance().getShortestWay(goingViewModel.bookInfo!!.latStart, goingViewModel.bookInfo!!.lngStart, goingViewModel.bookInfo!!.latEnd, goingViewModel.bookInfo!!.lngEnd) { isSuccess, timeArrivedDestination ->
             if (isSuccess) {
                 if (activity is MainActivity) {
-                    (activity as MainActivity).handleEventArrivedOrigin(timeArrivedDestination)
+                    (activity as MainActivity).handleEventArrivedOrigin(goingViewModel.bookInfo!!.startAddress, timeArrivedDestination)
                 }
             }
         }

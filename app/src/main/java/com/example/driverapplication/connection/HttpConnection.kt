@@ -32,6 +32,7 @@ class HttpConnection private constructor() {
                     val statusCode = it.networkResponse.statusCode
                     if (statusCode == 400) {
                         callback.invoke(false, DriverApplication.getAppContext().getString(R.string.no_account))
+                        return@ErrorListener
                     }
                 }
             } catch (e: Exception) {
@@ -66,6 +67,7 @@ class HttpConnection private constructor() {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
                     val error = dataError.getString("error")
                     callback.invoke(false, error)
+                    return@ErrorListener
                 }
             }
 
@@ -97,6 +99,7 @@ class HttpConnection private constructor() {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
                     val error = dataError.getString("error")
                     callback.invoke(false, error)
+                    return@ErrorListener
                 }
             }
 
@@ -128,6 +131,7 @@ class HttpConnection private constructor() {
                     val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
                     val error = dataError.getString("error")
                     callback.invoke(false, error)
+                    return@ErrorListener
                 }
             }
 
@@ -206,7 +210,7 @@ class HttpConnection private constructor() {
         private const val URL_UPDATE_STATUS_DRIVER = "http://%s/api/driver/update-status"
         private const val URL_LOGOUT = "http://%s/api/driver/logout"
 
-        private const val HOST = "192.168.0.102:3000"
+        private const val HOST = "10.0.40.65:3000"
         private const val CONNECTION_TIMEOUT = 30000
 
         private var instance: HttpConnection? = null
