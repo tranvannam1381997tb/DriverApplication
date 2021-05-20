@@ -200,7 +200,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 )
 
                                 HttpConnection.getInstance().updateStatusDriver()
-                                Log.d("NamTV", "update location LocationCallback")
+                                Log.d("NamTV", "update location LocationCallback $currentLocation")
                             }
                         }
                     }
