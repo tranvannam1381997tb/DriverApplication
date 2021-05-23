@@ -259,21 +259,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun gotoBookFragment() {
-        fragmentBook = BookFragment()
-        currentFragment = Constants.FRAGMENT_BOOK
-        mainViewModel.isShowingLayoutBook.set(true)
-        mainViewModel.isShowingLayoutBottom.set(false)
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(
-            R.anim.slide_in_bottom,
-            R.anim.slide_out_top,
-            R.anim.pop_in_bottom,
-            R.anim.pop_out_top
-        )
-        transaction.replace(R.id.fragmentBook, fragmentBook as BookFragment).commit()
-    }
 
     private fun getInfoUserBook(jsonObject: JSONObject) {
         val bookInfo = BookInfo(
@@ -372,6 +357,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 supportFragmentManager.beginTransaction().remove(fragment).commit()
             }
         }
+    }
+
+    private fun gotoBookFragment() {
+        fragmentBook = BookFragment()
+        currentFragment = Constants.FRAGMENT_BOOK
+        mainViewModel.isShowingLayoutBook.set(true)
+        mainViewModel.isShowingLayoutBottom.set(false)
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.slide_in_bottom,
+            R.anim.slide_out_top,
+            R.anim.pop_in_bottom,
+            R.anim.pop_out_top
+        )
+        transaction.replace(R.id.fragmentBook, fragmentBook as BookFragment).commit()
     }
 
     private fun gotoGoingFragment(statusGoingFragment: Int) {

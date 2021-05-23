@@ -1,4 +1,4 @@
-package com.example.driverapplication.shared_preferences
+package com.example.driverapplication.common
 
 open class SingletonHolder<out T: Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator

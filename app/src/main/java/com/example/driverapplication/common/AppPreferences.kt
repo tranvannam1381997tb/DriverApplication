@@ -1,9 +1,9 @@
-package com.example.driverapplication.shared_preferences
+package com.example.driverapplication.common
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.example.driverapplication.common.CommonUtils
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.BookInfo
 import org.json.JSONException
@@ -13,7 +13,9 @@ import org.json.JSONObject
  * Created by NamTV on 27/3/20.
  */
 @SuppressLint("CommitPrefEdits")
-class AppPreferences private constructor(context: Context) : BasePreference() {
+class AppPreferences private constructor(context: Context) {
+    private var prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private var editor: SharedPreferences.Editor = prefs.edit()
 
     fun saveBookInfoToPreferences(bookInfo: BookInfo) {
         val dataBookInfo = JSONObject()
@@ -60,22 +62,18 @@ class AppPreferences private constructor(context: Context) : BasePreference() {
     private var bookInfoPreferences: JSONObject? = null
         get() {
             return try {
-                JSONObject(prefs?.getString(BOOK_INFO, "")!!)
+                JSONObject(prefs.getString(BOOK_INFO, "")!!)
             } catch (e: JSONException) {
                 null
             }
         }
         set(value) {
             field = value
-            editor!!.putString(BOOK_INFO, field.toString()).commit()
+            editor.putString(BOOK_INFO, field.toString()).commit()
         }
 
     companion object : SingletonHolder<AppPreferences, Context>(::AppPreferences) {
         const val BOOK_INFO = "bookInfo"
     }
 
-    init {
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        editor = prefs!!.edit()
-    }
 }

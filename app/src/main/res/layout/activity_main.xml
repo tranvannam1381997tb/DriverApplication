@@ -55,7 +55,8 @@
             android:layout_marginStart="16dp"
             android:src="@drawable/logout"
             android:padding="8dp"
-            android:background="@color/white"/>
+            android:background="@color/white"
+            android:visibility="@{viewModel.isShowingLayoutBook ? View.INVISIBLE : View.VISIBLE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -17,10 +17,9 @@ import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.model.DriverStatus
-import com.example.driverapplication.shared_preferences.AppPreferences
+import com.example.driverapplication.common.AppPreferences
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
-import com.google.android.gms.maps.model.LatLng
 import org.json.JSONObject
 
 class BookFragment : Fragment() {
