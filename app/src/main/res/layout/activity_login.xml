@@ -1,92 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+	<data>
 
-        <variable
-            name="viewModel"
-            type="com.example.driverapplication.viewmodel.LoginViewModel" />
-    </data>
+		<variable
+			name="viewModel"
+			type="com.example.driverapplication.viewmodel.LoginViewModel" />
+	</data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edtPhoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="96dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/edit_text_style"
-            android:focusableInTouchMode="true"
-            android:hint="@string/prompt_phone_number"
-            android:imeOptions="actionNext"
-            android:inputType="textNoSuggestions"
-            android:maxLines="1"
-            android:paddingStart="15dp"
-            android:paddingEnd="20dp"
-            android:singleLine="true"
-            app:layout_constraintTop_toTopOf="parent" />
+		<TextView
+			android:id="@+id/description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="80dp"
+			android:gravity="center"
+			android:text="@string/app_name"
+			android:textColor="@color/color_black"
+			android:textSize="34sp"
+			android:textStyle="bold"
+			app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/edit_text_style"
-            android:focusableInTouchMode="true"
-            android:hint="@string/prompt_password"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:paddingStart="15dp"
-            android:paddingEnd="20dp"
-            android:singleLine="true"
-            app:layout_constraintTop_toBottomOf="@+id/edtPhoneNumber" />
+		<androidx.appcompat.widget.AppCompatEditText
+			android:id="@+id/edtPhoneNumber"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_marginStart="24dp"
+			android:layout_marginTop="80dp"
+			android:layout_marginEnd="24dp"
+			android:background="@drawable/edit_text_style"
+			android:focusableInTouchMode="true"
+			android:hint="@string/prompt_phone_number"
+			android:imeOptions="actionNext"
+			android:inputType="textNoSuggestions"
+			android:maxLines="1"
+			android:paddingStart="15dp"
+			android:paddingEnd="20dp"
+			android:singleLine="true"
+			app:layout_constraintTop_toBottomOf="@id/description" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/sign_up"
-            android:textColor="@color/color_sign_up"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtPassword"
-            app:onSingleClick="@{() -> viewModel.startSignUp()}" />
+		<androidx.appcompat.widget.AppCompatEditText
+			android:id="@+id/edtPassword"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_marginStart="24dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginEnd="24dp"
+			android:background="@drawable/edit_text_style"
+			android:focusableInTouchMode="true"
+			android:hint="@string/prompt_password"
+			android:imeOptions="actionDone"
+			android:inputType="textPassword"
+			android:maxLines="1"
+			android:paddingStart="15dp"
+			android:paddingEnd="20dp"
+			android:singleLine="true"
+			app:layout_constraintTop_toBottomOf="@+id/edtPhoneNumber" />
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="16dp"
-            android:enabled="@{viewModel.isEnableBtnLogin}"
-            android:text="@string/action_sign_in"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtPassword"
-            app:layout_constraintVertical_bias="0.2" />
+		<TextView
+			android:id="@+id/txtSignUp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="@string/sign_up"
+			android:textColor="@color/color_sign_up"
+			android:textSize="18sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/edtPassword"
+			app:onSingleClick="@{() -> viewModel.startSignUp()}" />
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+		<Button
+			android:id="@+id/login"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="start"
+			android:layout_marginTop="40dp"
+			android:paddingStart="16dp"
+			android:paddingEnd="16dp"
+			android:enabled="@{viewModel.isEnableBtnLogin}"
+			android:text="@string/action_sign_in"
+			style="@style/Widget.Button.Simple"
+			android:background="@drawable/button_style"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/txtSignUp"
+			app:layout_constraintVertical_bias="0.2" />
 
+		<ProgressBar
+			android:id="@+id/loading"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintVertical_bias="0.3" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
