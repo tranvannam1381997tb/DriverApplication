@@ -8,17 +8,10 @@ import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
 import com.example.driverapplication.common.AccountManager
-import com.example.driverapplication.common.Constants
-import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.model.DriverStatus
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
 
 class HttpConnection private constructor() {
 
@@ -88,8 +81,9 @@ class HttpConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    fun startArriving(jsonBody: JSONObject, callback:(Boolean, String) -> Unit) {
-        val url = String.format(URL_START_ARRIVING, HOST)
+    fun updateStatusArrivingOrigin(callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_STATUS_ARRIVING_ORIGIN, HOST)
+        val jsonBody = getJsonDataUpdateStatusGoing(DriverStatus.StatusArrivingOrigin)
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
             callback.invoke(true, it.toString())
         }, Response.ErrorListener {
@@ -120,8 +114,9 @@ class HttpConnection private constructor() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    fun startGoing(jsonBody: JSONObject, callback:(Boolean, String) -> Unit) {
-        val url = String.format(URL_START_GOING, HOST)
+    fun updateStatusArrivedOrigin(callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_STATUS_ARRIVED_ORIGIN, HOST)
+        val jsonBody = getJsonDataUpdateStatusGoing(DriverStatus.StatusArrivedOrigin)
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
             callback.invoke(true, it.toString())
         }, Response.ErrorListener {
@@ -150,6 +145,112 @@ class HttpConnection private constructor() {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+    }
+
+    fun updateStatusArrivingDestination(callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_STATUS_ARRIVING_DESTINATION, HOST)
+        val jsonBody = getJsonDataUpdateStatusGoing(DriverStatus.StatusArrivingDestination)
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            callback.invoke(true, it.toString())
+        }, Response.ErrorListener {
+            if (it.networkResponse != null && it.networkResponse.data.isEmpty()) {
+                val statusCode = it.networkResponse.statusCode
+                if (statusCode == 400) {
+                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
+                    val error = dataError.getString("error")
+                    callback.invoke(false, error)
+                    return@ErrorListener
+                }
+            }
+
+            callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+                CONNECTION_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
+    fun updateStatusArrivedDestination(callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_STATUS_ARRIVED_DESTINATION, HOST)
+        val jsonBody = getJsonDataUpdateStatusGoing(DriverStatus.StatusArrivedDestination)
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            callback.invoke(true, it.toString())
+        }, Response.ErrorListener {
+            if (it.networkResponse != null && it.networkResponse.data.isEmpty()) {
+                val statusCode = it.networkResponse.statusCode
+                if (statusCode == 400) {
+                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
+                    val error = dataError.getString("error")
+                    callback.invoke(false, error)
+                    return@ErrorListener
+                }
+            }
+
+            callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+                CONNECTION_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
+    fun updateStatusBilling(callback:(Boolean, String) -> Unit) {
+        val url = String.format(URL_STATUS_BILLING, HOST)
+        val jsonBody = getJsonDataUpdateStatusGoing(DriverStatus.StatusArrivedOrigin)
+        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener<JSONObject> {
+            callback.invoke(true, it.toString())
+        }, Response.ErrorListener {
+            if (it.networkResponse != null && it.networkResponse.data.isEmpty()) {
+                val statusCode = it.networkResponse.statusCode
+                if (statusCode == 400) {
+                    val dataError = JSONObject(it.networkResponse.data.toString(Charsets.UTF_8))
+                    val error = dataError.getString("error")
+                    callback.invoke(false, error)
+                    return@ErrorListener
+                }
+            }
+
+            callback.invoke(false, DriverApplication.getAppContext().getString(R.string.connect_server_error))
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json; charset=utf-8"
+                params["Accept"] = "application/json"
+                return params
+            }
+        }
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+                CONNECTION_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
+        requestQueue.add(jsonObjectRequest)
+    }
+
+    private fun getJsonDataUpdateStatusGoing(status: DriverStatus): JSONObject {
+        val jsonBody = JSONObject()
+        jsonBody.put(DriverInfoKey.KeyDriverId.rawValue, AccountManager.getInstance().getDriverId())
+        jsonBody.put(DriverInfoKey.KeyStatus.rawValue, status.rawValue)
+        return jsonBody
     }
 
     fun updateStatusDriver() {
@@ -205,8 +306,11 @@ class HttpConnection private constructor() {
     companion object {
         private const val URL_LOGIN_FORMAT = "http://%s/api/driver/login"
         private const val URL_SIGN_UP = "http://%s/api/driver/create"
-        private const val URL_START_ARRIVING = "http://%s/api/driver/arriving"
-        private const val URL_START_GOING = "http://%s/api/driver/going"
+        private const val URL_STATUS_ARRIVING_ORIGIN = "http://%s/api/driver/arriving-origin"
+        private const val URL_STATUS_ARRIVED_ORIGIN = "http://%s/api/driver/arrived-origin"
+        private const val URL_STATUS_ARRIVING_DESTINATION = "http://%s/api/driver/arriving-destination"
+        private const val URL_STATUS_ARRIVED_DESTINATION = "http://%s/api/driver/arrived-destination"
+        private const val URL_STATUS_BILLING = "http://%s/api/driver/billing"
         private const val URL_UPDATE_STATUS_DRIVER = "http://%s/api/driver/update-status"
         private const val URL_LOGOUT = "http://%s/api/driver/logout"
 

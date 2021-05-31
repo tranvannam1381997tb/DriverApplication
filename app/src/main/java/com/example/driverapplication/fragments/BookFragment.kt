@@ -50,7 +50,7 @@ class BookFragment : Fragment() {
                 }
             }
 
-            HttpConnection.getInstance().startArriving(getJSONArriving()) { isSuccess, dataResponse->
+            HttpConnection.getInstance().updateStatusArrivingOrigin { isSuccess, dataResponse->
                 if (isSuccess) {
                     // TODO
                 }
@@ -64,11 +64,5 @@ class BookFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun getJSONArriving(): JSONObject {
-        val jsonBody = JSONObject()
-        jsonBody.put(DriverInfoKey.KeyStatus.rawValue, DriverStatus.StatusArrivingOrigin.rawValue)
-        return jsonBody
     }
 }

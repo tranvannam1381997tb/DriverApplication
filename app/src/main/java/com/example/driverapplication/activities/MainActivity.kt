@@ -1,7 +1,6 @@
 package com.example.driverapplication.activities
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -312,7 +311,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 drawShortestWayToUser()
                 mainViewModel.isShowingLayoutBook.set(false)
                 mainViewModel.isShowingLayoutBottom.set(true)
-                gotoGoingFragment(GoingFragment.STATUS_GOING_PICK_UP)
+                gotoGoingFragment(GoingFragment.STATUS_ARRIVING_ORIGIN)
             } else {
                 // TODO
             }
@@ -334,7 +333,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun handleEventGoing() {
         mainViewModel.isShowingLayoutBottom.set(true)
-        gotoGoingFragment(GoingFragment.STATUS_GOING)
+        gotoGoingFragment(GoingFragment.STATUS_ARRIVING_DESTINATION)
     }
 
     fun handleEventArrivedDestination() {

@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.setOnSingleClickListener
+import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentGoingBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
-import com.google.android.gms.maps.model.LatLng
 
 class GoingFragment : Fragment() {
     private val goingViewModel: MainViewModel
@@ -25,7 +25,7 @@ class GoingFragment : Fragment() {
             }
 
     private lateinit var binding: FragmentGoingBinding
-    private var currentStatus = STATUS_GOING_PICK_UP
+    private var currentStatus = STATUS_ARRIVING_ORIGIN
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_going, container, false)
@@ -39,13 +39,13 @@ class GoingFragment : Fragment() {
     private fun setupEvent() {
         binding.btnArrived.setOnSingleClickListener(View.OnClickListener {
             when (currentStatus) {
-                STATUS_GOING_PICK_UP -> handleGoingPickUp()
+                STATUS_ARRIVING_ORIGIN -> handleClickArrivedOrigin()
 
-                STATUS_ARRIVED_ORIGIN -> handleArrivedOrigin()
+                STATUS_ARRIVED_ORIGIN -> handleClickArrivingDestination()
 
-                STATUS_GOING -> handleGoing()
+                STATUS_ARRIVING_DESTINATION -> handleClickArrivedDestination()
 
-                STATUS_ARRIVED_DESTINATION -> handleArrivedDestination()
+                STATUS_ARRIVED_DESTINATION -> handleClickBill()
             }
 
         })
@@ -56,18 +56,18 @@ class GoingFragment : Fragment() {
         if (bundle != null) {
             currentStatus = bundle.getInt(STATUS_GOING_FRAGMENT)
             when (currentStatus) {
-                STATUS_GOING_PICK_UP -> updateLayoutGoingPickUp()
+                STATUS_ARRIVING_ORIGIN -> updateLayoutArrivingOrigin()
 
                 STATUS_ARRIVED_ORIGIN -> updateLayoutArrivedOrigin()
 
-                STATUS_GOING -> updateLayoutGoing()
+                STATUS_ARRIVING_DESTINATION -> updateLayoutArrivingDestination()
 
                 STATUS_ARRIVED_DESTINATION -> updateLayoutArrivedDestination()
             }
         }
     }
 
-    private fun updateLayoutGoingPickUp() {
+    private fun updateLayoutArrivingOrigin() {
         binding.description.setText(R.string.description_arrived_origin)
         binding.btnArrived.setText(R.string.arrived_origin)
     }
@@ -77,7 +77,7 @@ class GoingFragment : Fragment() {
         binding.btnArrived.setText(R.string.going)
     }
 
-    private fun updateLayoutGoing() {
+    private fun updateLayoutArrivingDestination() {
         binding.description.setText(R.string.description_going)
         binding.btnArrived.setText(R.string.arrived_destination)
     }
@@ -87,7 +87,7 @@ class GoingFragment : Fragment() {
         binding.btnArrived.setText(R.string.bill)
     }
 
-    private fun handleGoingPickUp() {
+    private fun handleClickArrivedOrigin() {
         MapsConnection.getInstance().getShortestWay(goingViewModel.bookInfo!!.latStart, goingViewModel.bookInfo!!.lngStart, goingViewModel.bookInfo!!.latEnd, goingViewModel.bookInfo!!.lngEnd) { isSuccess, timeArrivedDestination ->
             if (isSuccess) {
                 if (activity is MainActivity) {
@@ -95,9 +95,12 @@ class GoingFragment : Fragment() {
                 }
             }
         }
+        HttpConnection.getInstance().updateStatusArrivedOrigin { isSuccess, dataResponse->
+
+        }
     }
 
-    private fun handleArrivedOrigin() {
+    private fun handleClickArrivingDestination() {
         FirebaseConnection.getInstance().pushNotifyGoing(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
             if (isSuccess) {
                 if (activity is MainActivity) {
@@ -107,9 +110,13 @@ class GoingFragment : Fragment() {
                 // TODO
             }
         }
+
+        HttpConnection.getInstance().updateStatusArrivingDestination { isSuccess, dataResponse->
+
+        }
     }
 
-    private fun handleGoing() {
+    private fun handleClickArrivedDestination() {
         FirebaseConnection.getInstance().pushNotifyArrivedDestination(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
             if (isSuccess) {
                 if (activity is MainActivity) {
@@ -119,9 +126,13 @@ class GoingFragment : Fragment() {
                 // TODO
             }
         }
+
+        HttpConnection.getInstance().updateStatusArrivedDestination { isSuccess, dataResponse->
+
+        }
     }
 
-    private fun handleArrivedDestination() {
+    private fun handleClickBill() {
         FirebaseConnection.getInstance().pushNotifyBill(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
             if (isSuccess) {
                 if (activity is MainActivity) {
@@ -131,14 +142,17 @@ class GoingFragment : Fragment() {
                 // TODO
             }
         }
+
+        HttpConnection.getInstance().updateStatusBilling { isSuccess, dataResponse->
+
+        }
     }
 
     companion object {
         const val STATUS_GOING_FRAGMENT = "statusGoingFragment"
-        const val STATUS_GOING_PICK_UP = 0
+        const val STATUS_ARRIVING_ORIGIN = 0
         const val STATUS_ARRIVED_ORIGIN = 1
-        const val STATUS_GOING = 2
+        const val STATUS_ARRIVING_DESTINATION = 2
         const val STATUS_ARRIVED_DESTINATION = 3
-
     }
 }
