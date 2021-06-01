@@ -104,11 +104,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         DriverFirebaseMessagingService.bookListener = object : BookListener {
 
             override fun handleBookRequest(jsonData: JSONObject) {
-                if (!mainViewModel.isShowingLayoutBottom.get()!!) {
-                    Log.d("NamTV", "notify = ${jsonData.getString(FirebaseConstants.KEY_USER_ID)}")
-                    getInfoUserBook(jsonData)
-                    CommonUtils.vibrateDevice()
-                    gotoBookFragment()
+                this@MainActivity.runOnUiThread {
+                    if (!mainViewModel.isShowingLayoutBottom.get()!!) {
+                        Log.d("NamTV", "notify = ${jsonData.getString(FirebaseConstants.KEY_USER_ID)}")
+                        getInfoUserBook(jsonData)
+                        CommonUtils.vibrateDevice()
+                        gotoBookFragment()
+                    }
                 }
             }
         }
@@ -353,7 +355,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fragmentBook = null
         for (fragment in supportFragmentManager.fragments) {
             if (fragment !is SupportMapFragment) {
-                supportFragmentManager.beginTransaction().remove(fragment).commit()
+                supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
             }
         }
     }
@@ -371,7 +373,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             R.anim.pop_in_bottom,
             R.anim.pop_out_top
         )
-        transaction.replace(R.id.fragmentBook, fragmentBook as BookFragment).commit()
+        transaction.replace(R.id.fragmentBook, fragmentBook as BookFragment).commitAllowingStateLoss()
     }
 
     private fun gotoGoingFragment(statusGoingFragment: Int) {
