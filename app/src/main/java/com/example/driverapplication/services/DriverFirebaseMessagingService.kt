@@ -29,6 +29,11 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
                 if (FirebaseUtils.validateInfoUser(jsonData)) {
                     bookListener?.handleBookRequest(JSONObject(jsonData))
                 }
+            } else if (intent.hasExtra(FirebaseConstants.KEY_CANCEL_BOOK)) {
+                val jsonData = intent.getStringExtra(FirebaseConstants.KEY_CANCEL_BOOK)!!
+                if (FirebaseUtils.validateJsonCancelBook(jsonData)) {
+                    bookListener?.handleCancelBook(JSONObject(jsonData))
+                }
             }
         } else {
             super.handleIntent(intent)
@@ -52,4 +57,5 @@ class DriverFirebaseMessagingService : FirebaseMessagingService() {
 
 interface BookListener {
     fun handleBookRequest(jsonData: JSONObject)
+    fun handleCancelBook(jsonData: JSONObject)
 }

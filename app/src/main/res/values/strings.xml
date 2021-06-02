@@ -46,7 +46,6 @@
 	<string name="connect_server_error">Lỗi kết nối máy chủ</string>
 	<string name="no_account">Tài khoản không đúng</string>
 
-
 	// Input vehicle
 	<string name="description_input_vehicle">Nhập thông tin xe</string>
 	<string name="choose_type_driver">Chọn loại xe</string>
@@ -79,6 +78,8 @@
 
 	<string name="description_final_book">Kết thúc chuyến đi</string>
 	<string name="bill">Tính tiền</string>
+
+	<string name="user_cancel_book">Khách hàng huỷ chuyến xe</string>
 
 	// Bill Fragment
 	<string name="description_bill_fragment">Thông tin chuyến xe</string>

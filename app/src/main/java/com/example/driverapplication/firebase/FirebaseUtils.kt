@@ -2,6 +2,7 @@ package com.example.driverapplication.firebase
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.Constants
 import com.google.firebase.database.DataSnapshot
 import org.json.JSONException
@@ -60,6 +61,11 @@ class FirebaseUtils {
             try {
                 val jsonObject = JSONObject(jsonData)
 
+                val driverId = jsonObject.getString(FirebaseConstants.KEY_DRIVER_ID)
+                if (driverId.isNullOrEmpty() || driverId != AccountManager.getInstance().getDriverId()) {
+                    return false
+                }
+
                 if (jsonObject.getString(FirebaseConstants.KEY_START_ADDRESS).isNullOrEmpty()) {
                     return false
                 }
@@ -75,6 +81,27 @@ class FirebaseUtils {
                 if (jsonObject.getString(FirebaseConstants.KEY_DISTANCE).isNullOrEmpty()) {
                     return false
                 }
+                return true
+            } catch (e: JSONException) {
+                return false
+            }
+        }
+
+        fun validateJsonCancelBook(jsonData: String?): Boolean {
+            if (jsonData.isNullOrEmpty()) {
+                return false
+            }
+            try {
+                val jsonObject = JSONObject(jsonData)
+
+                val driverId = jsonObject.getString(FirebaseConstants.KEY_DRIVER_ID)
+                if (driverId.isNullOrEmpty() || driverId != AccountManager.getInstance().getDriverId()) {
+                    return false
+                }
+                if (jsonObject.getString(FirebaseConstants.KEY_USER_ID).isNullOrEmpty()) {
+                    return false
+                }
+
                 return true
             } catch (e: JSONException) {
                 return false

@@ -17,11 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
-import com.example.driverapplication.common.AccountManager
-import com.example.driverapplication.common.CommonUtils
-import com.example.driverapplication.common.Constants
-import com.example.driverapplication.common.setOnSingleClickListener
+import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
+import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityMainBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.firebase.FirebaseConstants
@@ -107,6 +105,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 this@MainActivity.runOnUiThread {
                     if (!mainViewModel.isShowingLayoutBottom.get()!!) {
                         Log.d("NamTV", "notify = ${jsonData.getString(FirebaseConstants.KEY_USER_ID)}")
+                        getInfoUserBook(jsonData)
+                        CommonUtils.vibrateDevice()
+                        gotoBookFragment()
+                    }
+                }
+            }
+
+            override fun handleCancelBook(jsonData: JSONObject) {
+                this@MainActivity.runOnUiThread {
+                    if (mainViewModel.bookInfo != null) {
+                        val userId = jsonData.getString(FirebaseConstants.KEY_USER_ID)
+                        if (userId == mainViewModel.bookInfo!!.userId) {
+                            showDialogUserCancelBook()
+                        }
+
                         getInfoUserBook(jsonData)
                         CommonUtils.vibrateDevice()
                         gotoBookFragment()
@@ -260,7 +273,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     private fun getInfoUserBook(jsonObject: JSONObject) {
         val bookInfo = BookInfo(
             userId = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_USER_ID),
@@ -279,10 +291,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             distance = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_DISTANCE)
         )
         mainViewModel.bookInfo = bookInfo
-    }
-
-    private fun pushNotifyAgreeBook() {
-
     }
 
     private fun drawShortestWayToUser() {
@@ -451,6 +459,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // after generating our bitmap we are returning our bitmap.
         return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+    private fun showDialogUserCancelBook() {
+        val dialog = ConfirmDialog(this)
+        dialog.setTextDisplay(
+                getString(R.string.user_cancel_book),
+                null,
+                null,
+                getString(R.string.ok)
+        )
+        dialog.setOnClickOK(View.OnClickListener {
+            dialog.dismiss()
+            gotoMapFragment()
+            AppPreferences.getInstance(this).bookInfoPreferences = null
+            mainViewModel.bookInfo = null
+        })
+
+        dialog.setTextTypeBoldBtnOK()
+        dialog.show()
     }
 
     override fun onDestroy() {

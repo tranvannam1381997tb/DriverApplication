@@ -43,7 +43,7 @@ class BookFragment : Fragment() {
             val currentLocation = AccountManager.getInstance().getLocationDriver()
             MapsConnection.getInstance().getShortestWay(currentLocation.latitude, currentLocation.longitude, bookViewModel.bookInfo!!.latStart, bookViewModel.bookInfo!!.lngStart) { isSuccess, timeArrivedOrigin ->
                 if (isSuccess) {
-                    AppPreferences.getInstance(requireActivity()).saveBookInfoToPreferences(bookViewModel.bookInfo!!)
+                    AppPreferences.getInstance(requireActivity()).bookInfoPreferences = bookViewModel.bookInfo!!
                     if (activity is MainActivity) {
                         (activity as MainActivity).handleEventAgreeBook(timeArrivedOrigin)
                     }
