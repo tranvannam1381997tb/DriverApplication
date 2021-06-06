@@ -50,6 +50,7 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyAgreeBook = $notification")
     }
 
     private fun createBodyRequestAgreeBook(userTokenId: String, timeArrivedOrigin: Int): JSONObject {
@@ -95,6 +96,7 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyRejectBook = $notification")
     }
 
     private fun createBodyRequestRejectBook(userTokenId: String): JSONObject {
@@ -141,6 +143,7 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyArrivedOrigin = $notification")
     }
 
     private fun createBodyRequestArrivedOrigin(userTokenId: String, startAddress: String, timeArrivedDestination: Int):
@@ -163,9 +166,9 @@ class FirebaseConnection private constructor() {
         }
     }
 
-    fun pushNotifyGoing(userTokenId: String, callback: (Boolean) -> Unit) {
+    fun pushNotifyArrivingDestination(userTokenId: String, callback: (Boolean) -> Unit) {
         FirebaseMessaging.getInstance().subscribeToTopic(userTokenId)
-        val notification = createBodyRequestGoing(userTokenId)
+        val notification = createBodyRequestArrivingDestination(userTokenId)
         Log.d("NamTV", "pushNotifyGoing: $notification")
         val jsonObjectRequest = object : JsonObjectRequest(FirebaseConstants.FCM_API, notification,
             Response.Listener<JSONObject> {
@@ -177,7 +180,7 @@ class FirebaseConnection private constructor() {
                 }
             }, Response.ErrorListener {
                 callback.invoke(false)
-                Log.d("NamTV", "JsonObjectRequest Response.ErrorListener + $it")
+                Log.d("NamTV", "pushNotifyArrivingDestination Response.ErrorListener + $it")
             }) {
 
             override fun getHeaders(): MutableMap<String, String> {
@@ -189,9 +192,10 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyArrivingDestination = $notification")
     }
 
-    private fun createBodyRequestGoing(userTokenId: String): JSONObject {
+    private fun createBodyRequestArrivingDestination(userTokenId: String): JSONObject {
         val notification = JSONObject()
         val notificationBody = JSONObject()
         val notificationData = JSONObject()
@@ -234,6 +238,7 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyArrivedDestination = $notification")
     }
 
     private fun createBodyRequestArrivedDestination(userTokenId: String): JSONObject {
@@ -279,6 +284,7 @@ class FirebaseConnection private constructor() {
         }
         val requestQueue = Volley.newRequestQueue(DriverApplication.getAppContext())
         requestQueue.add(jsonObjectRequest)
+        Log.d("NamTV", "pushNotifyBill = $notification")
     }
 
     private fun createBodyRequestBill(userTokenId: String): JSONObject {

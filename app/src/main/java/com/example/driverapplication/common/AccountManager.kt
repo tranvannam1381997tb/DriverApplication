@@ -3,7 +3,7 @@ package com.example.driverapplication.common
 import android.util.Log
 import com.example.driverapplication.firebase.FirebaseManager
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 
 class AccountManager private constructor() {
 
@@ -56,15 +56,17 @@ class AccountManager private constructor() {
             FirebaseManager.getInstance().updateTokenIdToFirebase(tokenId!!)
             return
         }
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-            if(!it.isSuccessful){
-                Log.e("NamTV", "getInstanceId failed", it.exception)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (!it.isSuccessful) {
                 return@addOnCompleteListener
             }
-            val token =  it.result?.token
-            Log.d("NamTV", "$token")
-            callback.invoke(token)
-            FirebaseManager.getInstance().updateTokenIdToFirebase(token!!)
+            val token = it.result
+            if (token != null) {
+                Log.d("NamTV", "token = $token")
+                callback.invoke(token)
+                FirebaseManager.getInstance().updateTokenIdToFirebase(token)
+            }
         }
     }
 

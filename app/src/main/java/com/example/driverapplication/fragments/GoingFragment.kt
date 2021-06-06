@@ -101,7 +101,7 @@ class GoingFragment : Fragment() {
     }
 
     private fun handleClickArrivingDestination() {
-        FirebaseConnection.getInstance().pushNotifyGoing(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
+        FirebaseConnection.getInstance().pushNotifyArrivingDestination(goingViewModel.bookInfo!!.tokenId) { isSuccess ->
             if (isSuccess) {
                 if (activity is MainActivity) {
                     (activity as MainActivity).handleEventGoing()
