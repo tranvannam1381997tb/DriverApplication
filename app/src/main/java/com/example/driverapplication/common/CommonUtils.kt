@@ -12,9 +12,12 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.model.SexValue
+import com.example.driverapplication.model.TypeDriverValue
 import com.google.firebase.database.DataSnapshot
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -64,6 +67,52 @@ class CommonUtils {
             } else {
                 0
             }
+        }
+
+        fun getFloatFromJsonObject(jsonObject: JSONObject, key: String) : Float {
+            var data: Float? = null
+            if (jsonObject.has(key)) {
+                data = jsonObject.getString(key).toFloatOrNull()
+            }
+            if (data == null) {
+                data = 0F
+            }
+            return data
+        }
+
+        fun getDateFromJsonObject(jsonObject: JSONObject, key: String): String {
+            if (jsonObject.has(key)) {
+                return convertStringToDate(jsonObject.getString(key))
+            }
+            return ""
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        private fun convertStringToDate(dateString: String): String {
+            try {
+                val formatterServer = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_SERVER)
+                val odtInstanceAtOffset: OffsetDateTime = OffsetDateTime.parse(dateString, formatterServer)
+                val odtInstanceAtUTC: OffsetDateTime = odtInstanceAtOffset.withOffsetSameInstant(ZoneOffset.UTC)
+                val formatterApp = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_APP)
+                return odtInstanceAtUTC.format(formatterApp)
+            } catch (e: Exception) {
+                Log.d("NamTV", "CommonUtils::convertStringToDate: exception = $e")
+            }
+
+            return ""
+        }
+
+        fun getTypeDriver(jsonObject: JSONObject, key: String): String {
+            val typeDriver =  if (jsonObject.has(key)) {
+                jsonObject.getInt(key)
+            } else 0
+            if (typeDriver == 0) {
+                return TypeDriverValue.GRAB_BIKE.rawValue
+            }
+            if (typeDriver == 1) {
+                return TypeDriverValue.GRAB_CAR.rawValue
+            }
+            return ""
         }
 
         fun getDoubleFromDataSnapshot(snapshot: DataSnapshot, key: String): Double {
@@ -123,7 +172,7 @@ class CommonUtils {
 
         fun vibrateDevice() {
             val vibrator = DriverApplication.getAppContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 }

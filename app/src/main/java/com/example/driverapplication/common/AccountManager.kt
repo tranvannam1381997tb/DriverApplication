@@ -11,10 +11,10 @@ class AccountManager private constructor() {
     private var tokenId: String? = null
     private var name: String? = null
     private var age: Int? = null
-    private var sex: Int? = null
+    private var sex: String? = null
     private var phoneNumber: String? = null
     private var currentLocation: LatLng? = null
-    private var rate: Double? = null
+    private var rate: Float? = null
     private var status: Int? = null
     private var startDate: String? = null
     private var typeDriver: String? = null
@@ -46,7 +46,7 @@ class AccountManager private constructor() {
         driverId = id
     }
 
-    fun getDriverId(): String{
+    fun getDriverId(): String {
         return driverId ?: ""
     }
 
@@ -77,5 +77,54 @@ class AccountManager private constructor() {
 
     fun getLocationDriver(): LatLng {
         return currentLocation ?: Constants.DEFAULT_LOCATION
+    }
+
+    fun setDriverInfo(name: String, age: Int, sex: String, phoneNumber: String, status: Int, rate: Float, startDate: String, typeDriver: String, typeVehicle: String, licensePlateNumber: String) {
+        this.name = name
+        this.age = age
+        this.sex = sex
+        this.phoneNumber = phoneNumber
+        this.status = status
+        this.rate = rate
+        this.startDate = startDate
+        this.typeDriver = typeDriver
+        this.typeVehicle = typeVehicle
+        this.licensePlateNumber = licensePlateNumber
+    }
+
+    fun getName(): String {
+        return name!!
+    }
+
+    fun getSex(): String {
+        return sex!!
+    }
+
+    fun getAge(): Int {
+        return age!!
+    }
+
+    fun getPhoneNumber(): String {
+        return phoneNumber!!
+    }
+
+    fun getRate(): Float {
+        return rate!!
+    }
+
+    fun getStartDate(): String {
+        return startDate!!
+    }
+
+    fun getTypeDriver(): String {
+        return typeDriver!!
+    }
+
+    fun getTypeVehicle(): String {
+        return typeVehicle!!
+    }
+
+    fun getLicensePlateNumber(): String {
+        return licensePlateNumber!!
     }
 }

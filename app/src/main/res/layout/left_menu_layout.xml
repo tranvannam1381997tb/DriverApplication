@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:paddingStart="20dp"
+    android:paddingEnd="0dp">
+
+    <ImageView
+        android:id="@+id/imgLogout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:src="@drawable/logout"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/layoutLeftTxtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_size_name"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgLogout"
+        tools:text="Tran Van Nam" />
+
+    <LinearLayout
+        android:id="@+id/layout_name_driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="start|center"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLeftTxtName" >
+
+        <TextView
+            android:id="@+id/layoutLeftTypeDriver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_info"
+            tools:text="GrabBike" />
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_start_with_info"
+            android:src="@drawable/black_circle" />
+
+        <TextView
+            android:id="@+id/layoutLeftRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start_with_info"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_name"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="5.0" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_start_with_info"
+            android:src="@drawable/star" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/layoutLeftTxtAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_size_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_name_driver"
+        tools:text="Tuổi: 18" />
+
+    <TextView
+        android:id="@+id/layoutLeftTxtSex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_size_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutLeftTxtAge"
+        tools:text="Giới tính: Nam" />
+
+    <TextView
+        android:id="@+id/layoutLeftTxtPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_size_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutLeftTxtSex"
+        tools:text="Số điện thoại: 123123123" />
+
+    <TextView
+        android:id="@+id/layoutLeftStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_size_info"
+        tools:text="@string/start_date"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLeftTxtPhoneNumber"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/layout_info_vehicle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLeftStartDate"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/layoutLeftTypeVehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_info"
+            tools:text="Honda Wave" />
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_start_with_info"
+            android:src="@drawable/black_circle" />
+
+        <TextView
+            android:id="@+id/layoutLeftLicensePlateNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start_with_info"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_size_info"
+            tools:text="29G1-075.80" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

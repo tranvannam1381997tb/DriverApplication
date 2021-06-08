@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="@{viewModel.isCheckGrabBike()}"
-                    android:onClick="@{() -> viewModel.checkRadioMale()}"
+                    android:onClick="@{() -> viewModel.checkRadioGrabBike()}"
                     android:text="@string/grab_bike"
                     android:textSize="@dimen/text_size_name" />
 
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:checked="@{!viewModel.isCheckGrabBike()}"
-                    android:onClick="@{() -> viewModel.checkRadioFemale()}"
+                    android:onClick="@{() -> viewModel.checkRadioGrabCar()}"
                     android:text="@string/grab_car"
                     android:textSize="@dimen/text_size_name" />
             </RadioGroup>

@@ -13,9 +13,9 @@ import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityLoginBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.DriverInfoKey
+import com.example.driverapplication.model.SexValue
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.LoginViewModel
-import kotlinx.coroutines.*
 import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
@@ -26,8 +26,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
     private lateinit var binding: ActivityLoginBinding
-
-    private var jobStartLogin: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // TODO debug code
-        binding.edtPhoneNumber.setText("0976356355")
+        binding.edtPhoneNumber.setText("0976356358")
         binding.edtPassword.setText("123456")
     }
 
@@ -80,11 +78,13 @@ class LoginActivity : AppCompatActivity() {
         HttpConnection.getInstance().startLogin(getJSONLogin()) { isSuccess, dataResponse ->
             if (isSuccess) {
                 val jsonObject = JSONObject(dataResponse)
-                val jsonDriver = CommonUtils.getJsonObjectFromJsonObject(jsonObject, FirebaseConstants.KEY_DRIVER)
-                val userId = CommonUtils.getStringFromJsonObject(jsonDriver, DriverInfoKey.KeyDriverId.rawValue)
-                val accountManager = AccountManager.getInstance()
-                accountManager.saveDriverId(userId)
                 startMainActivity()
+
+                if (saveDriverInfo(jsonObject)) {
+                    startMainActivity()
+                } else {
+                    showDialogError(getString(R.string.login_false))
+                }
             } else {
                 showDialogError(dataResponse)
             }
@@ -102,6 +102,42 @@ class LoginActivity : AppCompatActivity() {
         }
         jsonBody.put(DriverInfoKey.KeyPassword.rawValue, binding.edtPassword.text.toString())
         return jsonBody
+    }
+
+    private fun saveDriverInfo(jsonObject: JSONObject): Boolean {
+        val driverInfo = CommonUtils.getJsonObjectFromJsonObject(jsonObject, FirebaseConstants.KEY_DRIVER)
+
+        val driverId = CommonUtils.getStringFromJsonObject(driverInfo, DriverInfoKey.KeyDriverId.rawValue)
+        if (driverId.isEmpty()) {
+            return false
+        }
+        val accountManager = AccountManager.getInstance()
+        accountManager.saveDriverId(driverId)
+
+        val name = CommonUtils.getStringFromJsonObject(driverInfo, DriverInfoKey.KeyName.rawValue)
+        val age = CommonUtils.getIntFromJsonObject(driverInfo, DriverInfoKey.KeyAge.rawValue)
+        val sex = CommonUtils.getIntFromJsonObject(driverInfo, DriverInfoKey.KeySex.rawValue)
+        val sexValue = if (sex == 0) {
+            SexValue.MALE.rawValue
+        } else {
+            SexValue.FEMALE.rawValue
+        }
+        val phoneNumber = CommonUtils.getStringFromJsonObject(driverInfo, DriverInfoKey.KeyPhoneNumber.rawValue)
+        val phoneNumberValue = if (phoneNumber.startsWith("+84")) {
+            "0" + phoneNumber.substring(3, phoneNumber.length)
+        } else {
+            phoneNumber
+        }
+        val status = CommonUtils.getIntFromJsonObject(driverInfo, DriverInfoKey.KeyStatus.rawValue)
+        val rate = CommonUtils.getFloatFromJsonObject(driverInfo, DriverInfoKey.KeyRate.rawValue)
+        val startDate = CommonUtils.getDateFromJsonObject(driverInfo, DriverInfoKey.KeyStartDate.rawValue)
+        val typeDriver = CommonUtils.getTypeDriver(driverInfo, DriverInfoKey.KeyTypeDriver.rawValue)
+        val typeVehicle = CommonUtils.getStringFromJsonObject(driverInfo, DriverInfoKey.KeyTypeVehicle.rawValue)
+        val licensePlateNumber = CommonUtils.getStringFromJsonObject(driverInfo, DriverInfoKey.KeyLicensePlateNumber.rawValue)
+
+        accountManager.setDriverInfo(name, age, sexValue, phoneNumberValue, status, rate, startDate, typeDriver, typeVehicle, licensePlateNumber)
+
+        return true
     }
 
     private fun startMainActivity() {

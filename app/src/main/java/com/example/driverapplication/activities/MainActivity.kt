@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
@@ -80,6 +83,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         initDataMap()
         initView()
         setupEvent()
+        setupDrawerLayout()
         accountManager.getTokenIdDevice {  }
     }
 
@@ -128,7 +132,34 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        binding.imgLogout.setOnSingleClickListener(View.OnClickListener {
+//        binding.imgLogout.setOnSingleClickListener(View.OnClickListener {
+//            HttpConnection.getInstance().logout {
+//                Log.d("NamTV", "logout = $it")
+//                if (it) {
+//                    val intent = Intent(this, LoginActivity::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                    startActivity(intent)
+//                    finish()
+//                }
+//            }
+//        })
+        binding.imgInfo.setOnSingleClickListener(View.OnClickListener {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            binding.drawerLayout.openDrawer(binding.menuLeft)
+        })
+    }
+
+    private fun setupDrawerLayout() {
+        findViewById<TextView>(R.id.layoutLeftTxtName).text = accountManager.getName()
+        findViewById<TextView>(R.id.layoutLeftRate).text = accountManager.getRate().toString()
+        findViewById<TextView>(R.id.layoutLeftTxtAge).text = getString(R.string.age_info, accountManager.getAge().toString())
+        findViewById<TextView>(R.id.layoutLeftTxtSex).text = getString(R.string.sex_info, accountManager.getSex())
+        findViewById<TextView>(R.id.layoutLeftTxtPhoneNumber).text = getString(R.string.phone_number_info, accountManager.getPhoneNumber())
+        findViewById<TextView>(R.id.layoutLeftStartDate).text = getString(R.string.start_date_info, accountManager.getStartDate())
+        findViewById<TextView>(R.id.layoutLeftTypeVehicle).text = accountManager.getTypeVehicle()
+        findViewById<TextView>(R.id.layoutLeftLicensePlateNumber).text = accountManager.getLicensePlateNumber()
+        findViewById<TextView>(R.id.layoutLeftTypeDriver).text = accountManager.getTypeDriver()
+        findViewById<ImageView>(R.id.imgLogout).setOnSingleClickListener(View.OnClickListener {
             HttpConnection.getInstance().logout {
                 Log.d("NamTV", "logout = $it")
                 if (it) {
@@ -140,6 +171,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d("NamTV", "onMapReady")

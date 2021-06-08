@@ -24,6 +24,7 @@
 
 	//Login Activity
 	<string name="sign_up"><u>Đăng ký</u></string>
+	<string name="login_false">Lỗi đăng nhập</string>
 
 	//SignUp Activity
 	<string name="country_code_default">+84</string>
@@ -85,4 +86,9 @@
 	<string name="description_bill_fragment">Thông tin chuyến xe</string>
 	<string name="received_money">Bạn đã nhận tiền</string>
 
+	// Account Info Fragment
+	<string name="age_info">Tuổi: %s</string>
+	<string name="sex_info">Giới tính: %s</string>
+	<string name="phone_number_info">Số điện thoại: %s</string>
+	<string name="start_date_info">Ngày gia nhập: %s</string>
 </resources>
