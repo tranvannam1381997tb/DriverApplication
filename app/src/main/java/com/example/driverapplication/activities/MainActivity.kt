@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             tokenId = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_TOKEN_ID),
             name = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_NAME),
             age = CommonUtils.getIntFromJsonObject(jsonObject, FirebaseConstants.KEY_AGE),
-            sex = CommonUtils.getSexValue(CommonUtils.getIntFromJsonObject(jsonObject, FirebaseConstants.KEY_SEX)),
+            sex = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_SEX),
             phoneNumber = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_PHONE_NUMBER),
             startAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_START_ADDRESS),
             endAddress = CommonUtils.getStringFromJsonObject(jsonObject, FirebaseConstants.KEY_END_ADDRESS),
