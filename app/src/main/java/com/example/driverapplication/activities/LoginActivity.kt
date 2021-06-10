@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
         HttpConnection.getInstance().startLogin(getJSONLogin()) { isSuccess, dataResponse ->
             if (isSuccess) {
                 val jsonObject = JSONObject(dataResponse)
-                startMainActivity()
 
                 if (saveDriverInfo(jsonObject)) {
                     startMainActivity()

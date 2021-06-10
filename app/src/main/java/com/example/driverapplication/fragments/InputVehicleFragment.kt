@@ -14,12 +14,14 @@ import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentInputVehicleBinding
+import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.model.SexValue
 import com.example.driverapplication.model.TypeDriverValue
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.SignUpViewModel
 import org.json.JSONObject
+import java.util.*
 
 class InputVehicleFragment : Fragment() {
 
@@ -51,16 +53,44 @@ class InputVehicleFragment : Fragment() {
                 HttpConnection.getInstance().startSignUp(getJSONInfo()) { isSuccess, dataResponse ->
                     if (isSuccess) {
                         val jsonObject = JSONObject(dataResponse)
-                        val driverId = CommonUtils.getStringFromJsonObject(jsonObject, DriverInfoKey.KeyDriverId.rawValue)
-                        val accountManager = AccountManager.getInstance()
-                        accountManager.saveDriverId(driverId)
-                        startMainActivity()
+                        if (saveDriverInfo(jsonObject)) {
+                            startMainActivity()
+                        }
                     } else {
                         showToastError(dataResponse)
                     }
                 }
             }
         })
+    }
+
+    private fun saveDriverInfo(jsonObject: JSONObject): Boolean {
+        val driverId = CommonUtils.getStringFromJsonObject(jsonObject, DriverInfoKey.KeyDriverId.rawValue)
+        if (driverId.isEmpty()) {
+            return false
+        }
+        val accountManager = AccountManager.getInstance()
+        accountManager.saveDriverId(driverId)
+
+        val name = inputVehicleViewModel.name!!
+        val age = inputVehicleViewModel.age!!
+        val sex = inputVehicleViewModel.sex!!
+        val phoneNumber = inputVehicleViewModel.phoneNumber!!
+        val phoneNumberValue = if (phoneNumber.startsWith("+84")) {
+            "0" + phoneNumber.substring(3, phoneNumber.length)
+        } else {
+            phoneNumber
+        }
+        val status = 0
+        val rate = 5F
+        val startDate = Calendar.getInstance().time.toString()
+        val typeDriver = inputVehicleViewModel.typeDriver!!
+        val typeVehicle = inputVehicleViewModel.typeVehicle!!
+        val licensePlateNumber = inputVehicleViewModel.licensePlateNumber!!
+
+        accountManager.setDriverInfo(name, age, sex, phoneNumberValue, status, rate, startDate, typeDriver, typeVehicle, licensePlateNumber)
+
+        return true
     }
 
     private fun getJSONInfo(): JSONObject {
