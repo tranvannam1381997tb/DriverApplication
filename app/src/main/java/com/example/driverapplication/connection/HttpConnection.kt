@@ -314,7 +314,7 @@ class HttpConnection private constructor() {
         private const val URL_UPDATE_STATUS_DRIVER = "http://%s/api/driver/update-status"
         private const val URL_LOGOUT = "http://%s/api/driver/logout"
 
-        private const val HOST = "192.168.1.215:3000"
+        private const val HOST = "52.197.102.147:3000"
         private const val CONNECTION_TIMEOUT = 30000
 
         private var instance: HttpConnection? = null

@@ -49,6 +49,7 @@ class FirebaseManager private constructor() {
         val idDriver = AccountManager.getInstance().getDriverId()
         if (idDriver.isNotEmpty()) {
             databaseDrivers.child(idDriver).child(FirebaseConstants.KEY_TOKEN_ID).setValue(tokenId)
+            Log.d("NamTV", "token[$idDriver] = $tokenId")
         }
     }
 }
