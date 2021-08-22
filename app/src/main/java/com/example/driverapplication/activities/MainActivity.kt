@@ -48,7 +48,7 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private var map: GoogleMap? = null
+    private var mainMap: GoogleMap? = null
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel: MainViewModel
@@ -125,26 +125,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (userId == mainViewModel.bookInfo!!.userId) {
                             showDialogUserCancelBook()
                         }
-
-                        getInfoUserBook(jsonData)
-                        CommonUtils.vibrateDevice()
-                        gotoBookFragment()
                     }
                 }
             }
         }
-
-//        binding.imgLogout.setOnSingleClickListener(View.OnClickListener {
-//            HttpConnection.getInstance().logout {
-//                Log.d("NamTV", "logout = $it")
-//                if (it) {
-//                    val intent = Intent(this, LoginActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                    startActivity(intent)
-//                    finish()
-//                }
-//            }
-//        })
         binding.imgInfo.setOnSingleClickListener(View.OnClickListener {
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             binding.drawerLayout.openDrawer(binding.menuLeft)
@@ -185,10 +169,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d("NamTV", "onMapReady")
-        map = googleMap
+        mainMap = googleMap
 
         // Prompt the user for permission.
         getLocationPermission()
@@ -251,7 +234,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             if (location != null) {
                                 val currentLocation = LatLng(location.latitude, location.longitude)
                                 accountManager.setLocationDriver(currentLocation)
-                                map?.moveCamera(
+                                mainMap?.moveCamera(
                                     CameraUpdateFactory.newLatLng(currentLocation)
                                 )
 
@@ -266,7 +249,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (location != null) {
                         val currentLocation = LatLng(location.latitude, location.longitude)
                         accountManager.setLocationDriver(currentLocation)
-                        map?.moveCamera(
+                        mainMap?.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 currentLocation, Constants.DEFAULT_ZOOM_MAPS.toFloat()
                             )
@@ -302,16 +285,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
     private fun updateLocationUI() {
-        if (map == null) {
+        if (mainMap == null) {
             return
         }
         try {
             if (locationPermissionGranted) {
-                map?.isMyLocationEnabled = true
-                map?.uiSettings?.isMyLocationButtonEnabled = true
+                mainMap?.isMyLocationEnabled = true
+                mainMap?.uiSettings?.isMyLocationButtonEnabled = true
             } else {
-                map?.isMyLocationEnabled = false
-                map?.uiSettings?.isMyLocationButtonEnabled = false
+                mainMap?.isMyLocationEnabled = false
+                mainMap?.uiSettings?.isMyLocationButtonEnabled = false
                 accountManager.setLocationDriver(Constants.DEFAULT_LOCATION)
                 getLocationPermission()
             }
@@ -341,10 +324,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun drawShortestWayToUser() {
-        map!!.clear()
+        mainMap!!.clear()
         val polyLines = MapsConnection.getInstance().polylines
         for (i in 0 until polyLines.size) {
-            map!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
+            mainMap!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
         }
         val latLngStart = LatLng(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
         val currentLocation = AccountManager.getInstance().getLocationDriver()
@@ -352,10 +335,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun drawShortestWayToDestination() {
-        map!!.clear()
+        mainMap!!.clear()
         val polyLines = MapsConnection.getInstance().polylines
         for (i in 0 until polyLines.size) {
-            map!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
+            mainMap!!.addPolyline(PolylineOptions().addAll(polyLines[i]).color(Color.RED))
         }
         val latLngStart = LatLng(mainViewModel.bookInfo!!.latStart, mainViewModel.bookInfo!!.lngStart)
         val latLngEnd = LatLng(mainViewModel.bookInfo!!.latEnd, mainViewModel.bookInfo!!.lngEnd)
@@ -396,7 +379,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     fun handleEventArrivedDestination() {
         mainViewModel.isShowingLayoutBottom.set(true)
         gotoGoingFragment(GoingFragment.STATUS_ARRIVED_DESTINATION)
-        map!!.clear()
+        mainMap!!.clear()
     }
 
     fun handleEventBill() {
@@ -473,8 +456,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val markerOptionOrigin = MarkerOptions().apply {
             position(latLngOrigin)
         }
-        markerOrigin = map!!.addMarker(markerOptionOrigin)
-        markerDestination = map!!.addMarker(markerOptionDestination)
+        markerOrigin = mainMap!!.addMarker(markerOptionOrigin)
+        markerDestination = mainMap!!.addMarker(markerOptionDestination)
     }
 
     private fun bitmapFromVector(vectorResId: Int): BitmapDescriptor? {
@@ -519,8 +502,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         dialog.setOnClickOK(View.OnClickListener {
             dialog.dismiss()
             gotoMapFragment()
-            AppPreferences.getInstance(this).bookInfoPreferences = null
-            mainViewModel.bookInfo = null
+            refreshScreen()
         })
 
         dialog.setTextTypeBoldBtnOK()
@@ -530,6 +512,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onDestroy() {
         super.onDestroy()
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
+
+    private fun refreshScreen() {
+        mainMap?.clear()
+        AppPreferences.getInstance(this).bookInfoPreferences = null
+        mainViewModel.bookInfo = null
     }
 
     companion object {
