@@ -10,8 +10,6 @@ class Constants {
         const val DATE_FORMAT_SERVER = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
         const val DATE_FORMAT_APP = "dd, MMM yyyy"
 
-        const val KEY_SUCCESS = "success"
-
         const val FRAGMENT_MAP = 0
         const val FRAGMENT_BOOK = 1
         const val FRAGMENT_GOING = 2

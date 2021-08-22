@@ -7,14 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
-import com.example.driverapplication.common.*
+import com.example.driverapplication.common.CommonUtils
+import com.example.driverapplication.common.afterTextChanged
+import com.example.driverapplication.common.onEditorActionDone
+import com.example.driverapplication.common.onEditorActionNext
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.customviews.ConfirmDialog
 import com.example.driverapplication.databinding.ActivityLoginBinding
 import com.example.driverapplication.firebase.FirebaseConstants
 import com.example.driverapplication.manager.AccountManager
-import com.example.driverapplication.model.DriverInfoKey
-import com.example.driverapplication.model.SexValue
+import com.example.driverapplication.models.DriverInfoKey
+import com.example.driverapplication.models.SexValue
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.LoginViewModel
 import org.json.JSONObject
@@ -69,10 +72,6 @@ class LoginActivity : AppCompatActivity() {
             binding.loading.visibility = View.VISIBLE
             startLogin()
         }
-
-        // TODO debug code
-        binding.edtPhoneNumber.setText("0976356358")
-        binding.edtPassword.setText("123456")
     }
 
     private fun startLogin() {

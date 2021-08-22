@@ -1,4 +1,4 @@
-package com.example.driverapplication.model
+package com.example.driverapplication.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

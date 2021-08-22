@@ -7,12 +7,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -32,13 +32,12 @@ import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.fragments.GoingFragment
 import com.example.driverapplication.googlemaps.MapsConnection
 import com.example.driverapplication.manager.AccountManager
-import com.example.driverapplication.model.BookInfo
+import com.example.driverapplication.models.BookInfo
 import com.example.driverapplication.services.BookListener
 import com.example.driverapplication.services.DriverFirebaseMessagingService
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 import com.google.android.gms.location.*
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

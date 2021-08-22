@@ -9,7 +9,6 @@ import com.example.driverapplication.common.CommonUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import org.json.JSONObject
-import kotlin.collections.ArrayList
 
 class MapsConnection private constructor() {
 
@@ -90,8 +89,4 @@ class MapsConnection private constructor() {
             return instance!!
         }
     }
-}
-
-interface GetDistanceListener {
-    fun getDistance()
 }

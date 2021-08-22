@@ -8,10 +8,9 @@ import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
 import com.example.driverapplication.manager.AccountManager
-import com.example.driverapplication.model.DriverInfoKey
-import com.example.driverapplication.model.DriverStatus
+import com.example.driverapplication.models.DriverInfoKey
+import com.example.driverapplication.models.DriverStatus
 import org.json.JSONObject
-import java.lang.Exception
 
 class HttpConnection private constructor() {
 

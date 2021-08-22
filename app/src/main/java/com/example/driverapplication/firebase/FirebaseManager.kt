@@ -3,7 +3,8 @@ package com.example.driverapplication.firebase
 import android.util.Log
 import com.example.driverapplication.manager.AccountManager
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class FirebaseManager private constructor() {
 
@@ -30,11 +31,6 @@ class FirebaseManager private constructor() {
     private val databaseDrivers: DatabaseReference
             by lazy {
                 rootDb.child(FirebaseConstants.KEY_DRIVERS)
-            }
-
-    val databaseUsers: DatabaseReference
-            by lazy {
-                rootDb.child(FirebaseConstants.KEY_USERS)
             }
 
     fun updateLocationDriverToFirebase(location: LatLng) {

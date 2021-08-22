@@ -1,21 +1,21 @@
 package com.example.driverapplication.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
-import com.example.driverapplication.manager.AccountManager
+import com.example.driverapplication.common.AppPreferences
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.googlemaps.MapsConnection
-import com.example.driverapplication.common.AppPreferences
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 

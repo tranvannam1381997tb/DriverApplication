@@ -89,7 +89,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
                 android:singleLine="true"
-                android:text="Honda Wawe"
                 android:textSize="@dimen/text_size_name" />
 
             <TextView
@@ -113,7 +112,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
                 android:singleLine="true"
-                android:text="17B1-16315"
                 android:textSize="@dimen/text_size_name" />
         </LinearLayout>
 

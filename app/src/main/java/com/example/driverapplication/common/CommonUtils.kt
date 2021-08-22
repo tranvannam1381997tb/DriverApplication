@@ -3,23 +3,18 @@ package com.example.driverapplication.common
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.driverapplication.DriverApplication
-import com.example.driverapplication.model.SexValue
-import com.example.driverapplication.model.TypeDriverValue
-import com.google.firebase.database.DataSnapshot
+import com.example.driverapplication.models.SexValue
+import com.example.driverapplication.models.TypeDriverValue
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class CommonUtils {
@@ -113,48 +108,6 @@ class CommonUtils {
                 return TypeDriverValue.GRAB_CAR.rawValue
             }
             return ""
-        }
-
-        fun getDoubleFromDataSnapshot(snapshot: DataSnapshot, key: String): Double {
-            return (snapshot.child(key).getValue(Double::class.java)) ?: (-1).toDouble()
-        }
-
-        fun getIntFromDataSnapshot(snapshot: DataSnapshot, key: String): Int {
-            return (snapshot.child(key).getValue(Int::class.java)) ?: -1
-        }
-
-        fun getStringFromDataSnapshot(snapshot: DataSnapshot, key: String): String {
-            return (snapshot.child(key).getValue(String()::class.java)) ?: ""
-        }
-
-        fun getDateFromDataSnapshot(snapshot: DataSnapshot, key: String): String {
-            val dateString = (snapshot.child(key).getValue(String()::class.java)) ?: ""
-            return convertStringToDateFirebase(dateString)
-        }
-
-        @SuppressLint("SimpleDateFormat")
-        fun convertStringToDateFirebase(dateString: String): String {
-            try {
-                val formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_FOR_FIREBASE)
-                val date = formatter.parse(dateString)
-
-                return DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_APP).format(date)
-            } catch (e: Exception) {
-                Log.d("NamTV", "CommonUtils::convertStringToDate: exception = $e")
-            }
-
-            return ""
-        }
-
-        fun clearFocusEditText(activity: Activity) {
-            val view = activity.currentFocus
-            if (view != null && view is EditText) {
-                hideKeyboard(activity)
-                // Resign focus EditText
-                view.isFocusable = false
-                view.isFocusable = true
-                view.isFocusableInTouchMode = true
-            }
         }
 
         private fun hideKeyboard(activity: Activity){

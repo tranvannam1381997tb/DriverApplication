@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.example.driverapplication.firebase.FirebaseConstants
-import com.example.driverapplication.model.BookInfo
+import com.example.driverapplication.models.BookInfo
 import com.google.gson.Gson
-import org.json.JSONException
-import org.json.JSONObject
 
 /**
  * Created by NamTV on 27/3/20.

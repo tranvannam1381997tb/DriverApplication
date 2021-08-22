@@ -1,19 +1,19 @@
 package com.example.driverapplication.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.databinding.ActivitySignUpBinding
+import com.example.driverapplication.fragments.InputInfoFragment
+import com.example.driverapplication.fragments.InputPasswordFragment
+import com.example.driverapplication.fragments.InputPhoneNumberFragment
 import com.example.driverapplication.fragments.InputVehicleFragment
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.OnClickSignUpScreenListener
 import com.example.driverapplication.viewmodel.SignUpViewModel
-import com.example.grabapplication.fragments.InputInfoFragment
-import com.example.grabapplication.fragments.InputPasswordFragment
-import com.example.grabapplication.fragments.InputPhoneNumberFragment
 
 class SignUpActivity : AppCompatActivity() {
     private val signUpViewModel: SignUpViewModel

@@ -11,7 +11,6 @@ import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.databinding.FragmentBillBinding
-import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
 

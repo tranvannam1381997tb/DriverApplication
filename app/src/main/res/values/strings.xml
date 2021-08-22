@@ -4,21 +4,15 @@
 	<string name="prompt_password">Nhâp mật khẩu</string>
 	<string name="action_sign_in">Đăng nhập</string>
 	<string name="error">Lỗi</string>
-	<string name="description_map_screen">Đặt xe</string>
 	<string name="channel_id">channel2</string>
 
 	//Info driver fragment
 	<string name="start_date">Gia nhập </string>
 	<string name="grab_bike">GrabBike</string>
 	<string name="grab_car">GrabCar</string>
-	<string name="book_vehicle">Đặt xe</string>
-	<string name="distance_to_you">Khoảng cách đến chỗ bạn: </string>
-	<string name="time_to_you">Thời gian đến chỗ bạn: </string>
 
 	//Find place fragment
 	<string name="time_to_move">Thời gian di chuyển: </string>
-	<string name="distance_length">Khoảng cách: </string>
-	<string name="confirm_book_driver">Bạn có muốn đặt cuốc xe này chứ?</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Huỷ bỏ</string>
 
@@ -27,7 +21,6 @@
 	<string name="login_false">Lỗi đăng nhập</string>
 
 	//SignUp Activity
-	<string name="country_code_default">+84</string>
 	<string name="hint_phone_number">87654321</string>
 	<string name="next">Tiếp</string>
 	<string name="description_input_phone_number">Nhập số di động của bạn</string>
@@ -53,19 +46,16 @@
 	<string name="input_type_vehicle">Nhập dòng xe</string>
 	<string name="hint_input_type_vehicle">Honda Wawe</string>
 	<string name="input_license_plate_number">Biển số xe</string>
-	<string name="hint_input_license_plate_number">17B1-16315</string>
 	<string name="error_input_type_vehicle">Bạn chưa nhập dòng xe</string>
 	<string name="error_input_license_plate_number">Bạn chưa nhập biển số xe</string>
 
 	//Book Fragment
 	<string name="description_info">Có người đặt xe</string>
-	<string name="name">Họ tên</string>
 	<string name="start_address">Nơi đón: </string>
 	<string name="end_address">Điểm đến: </string>
 	<string name="distance">Quãng đường: </string>
 	<string name="price">Giá tiền: </string>
 	<string name="pick_up">Nhận cuốc</string>
-	<string name="desciption_book">Thông tin chuyến xe</string>
 
 	// Going Fragment
 	<string name="description_arrived_origin">Đang đón khách hàng</string>
