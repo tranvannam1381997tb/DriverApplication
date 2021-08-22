@@ -1,6 +1,6 @@
-package com.example.driverapplication.common
+package com.example.driverapplication.manager
 
-import android.util.Log
+import com.example.driverapplication.common.Constants
 import com.example.driverapplication.firebase.FirebaseManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.messaging.FirebaseMessaging

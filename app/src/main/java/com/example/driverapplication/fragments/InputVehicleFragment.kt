@@ -14,7 +14,7 @@ import com.example.driverapplication.activities.MainActivity
 import com.example.driverapplication.common.*
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentInputVehicleBinding
-import com.example.driverapplication.firebase.FirebaseConstants
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.model.SexValue
 import com.example.driverapplication.model.TypeDriverValue

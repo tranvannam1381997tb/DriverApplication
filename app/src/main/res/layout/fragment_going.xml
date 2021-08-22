@@ -110,7 +110,8 @@
 					android:src="@drawable/phone_call"
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+					app:layout_constraintTop_toTopOf="parent"
+					app:onSingleClick="@{() -> viewModel.onItemClickListener.clickIconPhone()}"/>
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
 

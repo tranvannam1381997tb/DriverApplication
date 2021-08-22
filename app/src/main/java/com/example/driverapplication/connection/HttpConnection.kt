@@ -7,7 +7,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
-import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.model.DriverInfoKey
 import com.example.driverapplication.model.DriverStatus
 import org.json.JSONObject
@@ -314,7 +314,7 @@ class HttpConnection private constructor() {
         private const val URL_UPDATE_STATUS_DRIVER = "http://%s/api/driver/update-status"
         private const val URL_LOGOUT = "http://%s/api/driver/logout"
 
-        private const val HOST = "192.168.1.161:3000"
+        private const val HOST = "18.183.101.118:3000"
         private const val CONNECTION_TIMEOUT = 30000
 
         private var instance: HttpConnection? = null

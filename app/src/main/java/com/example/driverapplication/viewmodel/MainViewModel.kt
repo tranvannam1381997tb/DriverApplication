@@ -10,4 +10,9 @@ class MainViewModel(var context: Context): ViewModel() {
     var isShowingLayoutBottom = ObservableField(false)
 
     var bookInfo: BookInfo? = null
+
+    var onItemClickListener: OnItemClickListener? = null
+    interface OnItemClickListener {
+        fun clickIconPhone()
+    }
 }

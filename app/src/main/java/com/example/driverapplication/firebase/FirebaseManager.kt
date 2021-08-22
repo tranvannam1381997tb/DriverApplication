@@ -1,7 +1,7 @@
 package com.example.driverapplication.firebase
 
 import android.util.Log
-import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.manager.AccountManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.*
 

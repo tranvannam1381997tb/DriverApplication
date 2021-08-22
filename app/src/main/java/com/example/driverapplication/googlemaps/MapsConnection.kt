@@ -1,22 +1,14 @@
 package com.example.driverapplication.googlemaps
 
-import android.graphics.Color
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.driverapplication.DriverApplication
 import com.example.driverapplication.R
-import com.example.driverapplication.common.AccountManager
 import com.example.driverapplication.common.CommonUtils
-import com.example.grabapplication.googlemaps.models.Distance
-import com.example.grabapplication.googlemaps.models.PlaceModel
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import org.json.JSONObject
-import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 class MapsConnection private constructor() {

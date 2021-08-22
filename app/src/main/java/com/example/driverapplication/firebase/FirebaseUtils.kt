@@ -2,7 +2,7 @@ package com.example.driverapplication.firebase
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.common.Constants
 import com.google.firebase.database.DataSnapshot
 import org.json.JSONException

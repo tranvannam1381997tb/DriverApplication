@@ -108,7 +108,7 @@
                 android:focusableInTouchMode="true"
                 android:gravity="start"
                 android:hint="@string/hint_input_age"
-                android:inputType="number"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"

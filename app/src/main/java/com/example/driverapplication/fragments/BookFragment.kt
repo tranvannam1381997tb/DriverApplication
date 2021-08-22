@@ -9,18 +9,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.driverapplication.R
 import com.example.driverapplication.activities.MainActivity
-import com.example.driverapplication.common.AccountManager
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.common.setOnSingleClickListener
 import com.example.driverapplication.connection.HttpConnection
 import com.example.driverapplication.databinding.FragmentBookBinding
 import com.example.driverapplication.firebase.FirebaseConnection
 import com.example.driverapplication.googlemaps.MapsConnection
-import com.example.driverapplication.model.DriverInfoKey
-import com.example.driverapplication.model.DriverStatus
 import com.example.driverapplication.common.AppPreferences
 import com.example.driverapplication.viewmodel.BaseViewModelFactory
 import com.example.driverapplication.viewmodel.MainViewModel
-import org.json.JSONObject
 
 class BookFragment : Fragment() {
     private val bookViewModel: MainViewModel

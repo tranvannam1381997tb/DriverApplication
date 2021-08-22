@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,7 @@ import com.example.driverapplication.fragments.BillFragment
 import com.example.driverapplication.fragments.BookFragment
 import com.example.driverapplication.fragments.GoingFragment
 import com.example.driverapplication.googlemaps.MapsConnection
+import com.example.driverapplication.manager.AccountManager
 import com.example.driverapplication.model.BookInfo
 import com.example.driverapplication.services.BookListener
 import com.example.driverapplication.services.DriverFirebaseMessagingService
@@ -147,6 +149,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             binding.drawerLayout.openDrawer(binding.menuLeft)
         })
+
+        mainViewModel.onItemClickListener = object : MainViewModel.OnItemClickListener {
+            override fun clickIconPhone() {
+                if (mainViewModel.bookInfo != null) {
+                    val callIntent = Intent(Intent.ACTION_CALL)
+                    callIntent.data = Uri.parse("tel:${mainViewModel.bookInfo!!.phoneNumber}")
+                    startActivity(callIntent)
+                }
+            }
+
+        }
     }
 
     private fun setupDrawerLayout() {
@@ -270,9 +283,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                this, arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CALL_PHONE
+                ),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
         } else {
