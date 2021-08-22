@@ -215,10 +215,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         if (currentFragment == Constants.FRAGMENT_BOOK) {
             currentFragment = Constants.FRAGMENT_MAP
             gotoMapFragment()
-            return
         }
-
-        super.onBackPressed()
     }
 
     /**

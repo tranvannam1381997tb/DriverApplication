@@ -61,7 +61,7 @@
                 android:src="@drawable/more"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{viewModel.isShowingLayoutBottom ? View.GONE : View.VISIBLE}" />
+                android:visibility="@{viewModel.isShowingLayoutBook() ? View.GONE : View.VISIBLE}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
