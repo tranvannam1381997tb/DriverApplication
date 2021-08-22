@@ -15,4 +15,5 @@
 
     <color name="color_button">#0077F5</color>
     <color name="color_red">#E82020</color>
+	<color name="text_color_button_when_clicked">#3ECACACA</color>
 </resources>
